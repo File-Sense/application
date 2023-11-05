@@ -1,0 +1,14 @@
+.DS_Store
+dist
+build
+**/node_modules
+**/venv
+
+engine/instance
+backend/bin
+
+**/build/bin
+
+**/*.exe
+
+release
