@@ -4,21 +4,19 @@
   "description": "A Semantic File Search Desktop Application",
   "scripts": {
     "postinstall": "node py-install.js && cd frontend && yarn",
+    "dev:CP": "cpy ./engine/**/*.* !.git/* !__pycache__/* backend/engine/",
     "dev:PY": "cd engine && python main.py dev",
     "dev:App": "cd frontend && yarn dev",
     "dev": "yarn tauri dev",
     "dev:Web": "concurrently \"yarn:dev:PY\" \"yarn:dev:App\" \"start http://localhost:3000\"",
-    "build:PY": "run-script-os",
-    "build:PY:win32": "cd engine && pyinstaller engine-win32.spec --distpath ../backend/bin/python --clean",
-    "build:PY:linux": "cd engine && pyinstaller engine-linux.spec --distpath ../backend/bin/python --clean",
-    "build:App": "cd frontend && yarn build",
+    "build:App": "yarn dev:CP && cd frontend && yarn build",
     "build": "yarn tauri build"
   },
   "author": "Pasindu Akalpa <pasinduakalpa1998@gmail.com>",
   "devDependencies": {
-    "@tauri-apps/cli": "^1.5.6",
+    "@tauri-apps/cli": "^1.5.8",
     "concurrently": "^8.2.2",
-    "run-script-os": "^1.1.6"
+    "cpy-cli": "^5.0.0"
   },
   "repository": {
     "type": "git",
