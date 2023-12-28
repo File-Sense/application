@@ -1,7 +1,9 @@
 pub mod python_mod {
     use std::{fs, os::windows::process::CommandExt, path::PathBuf, process::Command, thread};
 
-    use tauri::Window;
+    use serde_json::json;
+    use tauri::{Window, Wry};
+    use tauri_plugin_store::Store;
 
     #[derive(Debug)]
     /// Python Deps Install Error
@@ -25,7 +27,7 @@ pub mod python_mod {
     fn install_python_dependencies(
         python_path: &PathBuf,
         requirements_txt: PathBuf,
-        first_file: PathBuf,
+        mut store: Store<Wry>,
     ) -> Result<(), PythonDepsInstallError> {
         let install_status = Command::new(python_path)
             .arg("-m")
@@ -33,11 +35,15 @@ pub mod python_mod {
             .arg("install")
             .arg("-r")
             .arg(requirements_txt.as_path())
+            .creation_flags(CREATE_NO_WINDOW)
             .status()
             .expect("failed to install python deps");
 
         if install_status.success() {
-            fs::remove_file(first_file).expect("Failed to delete File");
+            store
+                .insert("first_run".to_string(), json!(false))
+                .expect("set key error");
+            store.save().unwrap();
             Ok(())
         } else {
             Err(PythonDepsInstallError)
@@ -65,19 +71,14 @@ pub mod python_mod {
     /// * `python_path` - A Ref PathBuf that holds detected python or python3 path
     /// * `main_py_path` - A PathBuf that holds main.py file path
     ///
-    fn start_python_server(
-        python_path: &PathBuf,
-        main_py_path: PathBuf,
-    ) -> Result<(), PythonServerStartError> {
-        let server_status = Command::new(python_path.as_path())
-            .arg(main_py_path.as_path())
-            .creation_flags(CREATE_NO_WINDOW)
-            .status();
-        if server_status.is_ok() {
-            Ok(())
-        } else {
-            Err(PythonServerStartError)
-        }
+    fn start_python_server(python_path: PathBuf, main_py_path: PathBuf) {
+        thread::spawn(move || {
+            let _server_status = Command::new(python_path.as_path())
+                .arg(main_py_path.as_path())
+                .creation_flags(CREATE_NO_WINDOW)
+                .status()
+                .expect("error");
+        });
     }
 
     /// This Function Install Python deps in first run & start python server else start python server
@@ -86,7 +87,6 @@ pub mod python_mod {
     ///
     /// * `python_path` - A PathBuf that holds detected python or python3 path
     /// * `main_py_path` - A PathBuf that holds main.py file path
-    /// * `first_file_path` - A PathBuf that holds TMP.tmp file path
     /// * `requirement_path` - A PathBuf that holds requirements.txt file path
     /// * `main_windows` - A Ref Window that holds main window
     /// * `splash_window` - A Ref Window that holds splashscreen window
@@ -94,22 +94,17 @@ pub mod python_mod {
     pub fn create_or_start_server(
         python_path: PathBuf,
         main_py_path: PathBuf,
-        first_file_path: PathBuf,
+        mut store: Store<Wry>,
         requirement_path: PathBuf,
         main_windows: &Window,
         splash_window: &Window,
     ) {
-        if first_file_path.exists() {
-            if install_python_dependencies(&python_path, requirement_path, first_file_path).is_ok()
-            {
-                thread::spawn(move || {
-                    let _ = start_python_server(&python_path, main_py_path);
-                });
+        if store.is_empty() {
+            if install_python_dependencies(&python_path, requirement_path, store).is_ok() {
+                let _ = start_python_server(python_path, main_py_path);
             }
         } else {
-            thread::spawn(move || {
-                let _ = start_python_server(&python_path, main_py_path);
-            });
+            let _ = start_python_server(python_path, main_py_path);
         }
         splash_window.close().unwrap();
         main_windows.show().unwrap();
