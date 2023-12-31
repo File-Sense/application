@@ -11,6 +11,10 @@
     "version": "0.1.0"
   },
   "tauri": {
+    "systemTray": {
+      "iconPath": "icons/32x32.png",
+      "iconAsTemplate": true
+    },
     "allowlist": {
       "all": false,
       "shell": {
@@ -24,7 +28,7 @@
         "createDir": false,
         "exists": false,
         "readDir": false,
-        "readFile": false,
+        "readFile": true,
         "removeDir": false,
         "removeFile": false,
         "renameFile": false,
@@ -88,6 +92,8 @@
         "resizable": true,
         "title": "File Sense",
         "width": 800,
+        "minWidth": 800,
+        "minHeight": 600,
         "visible": false
       },
       {

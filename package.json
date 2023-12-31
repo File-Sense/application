@@ -6,9 +6,10 @@
     "postinstall": "node py-install.js && cd frontend && yarn",
     "dev:CP": "ncp ./engine/ ./backend/engine --stopOnErr",
     "dev:PY": "cd engine && python main.py dev",
+    "dev:PY:NOR": "cd engine && python main.py",
     "dev:App": "cd frontend && yarn dev",
     "dev": "yarn tauri dev",
-    "dev:Web": "concurrently \"yarn:dev:PY\" \"yarn:dev:App\" \"start http://localhost:3000\"",
+    "dev:Web": "concurrently \"yarn:dev:PY:NOR\" \"yarn:dev:App\" \"start http://localhost:3000\"",
     "build:App": "yarn dev:CP && cd frontend && yarn build",
     "build": "yarn tauri build"
   },

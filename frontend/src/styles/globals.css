@@ -74,6 +74,18 @@
       rgba(255, 0, 0, 0.5) 0 2px 12px;
     animation: blinkRed 0.5s infinite;
   }
+
+  .hazard-border {
+    border: 10px solid white;
+    border-image: repeating-linear-gradient(
+        -45deg,
+        #000,
+        #000 20px,
+        #fccf02 20px,
+        #fccf02 40px
+      )
+      10;
+  }
 }
 
 @layer base {

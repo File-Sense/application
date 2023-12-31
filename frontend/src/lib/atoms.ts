@@ -1,4 +1,5 @@
 import { ping } from "#/functions/apiFunctions";
+import { atom } from "jotai";
 import { atomWithQuery } from "jotai-tanstack-query";
 
 export const pingAtom = atomWithQuery(() => ({
@@ -8,3 +9,5 @@ export const pingAtom = atomWithQuery(() => ({
   retryDelay: 2000,
   refetchOnMount: true,
 }));
+
+export const imageObjUrlAtom = atom<string | null>(null);

@@ -8,12 +8,12 @@ import {
   TooltipProvider,
 } from "./ui/tooltip";
 import { pingAtom } from "#/lib/atoms";
-export function StatusLed() {
+export default function StatusLed() {
   const [{ data }] = useAtom(pingAtom);
 
   return (
     <div className="flex items-center gap-1">
-      <div className="text-sm font-semibold">AI STATUS:</div>
+      <div className="text-xl font-medium">AI STATUS:</div>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger>
