@@ -3,8 +3,7 @@
 import { open as dialogOpen } from "@tauri-apps/api/dialog";
 import { readBinaryFile } from "@tauri-apps/api/fs";
 import { uint8arrayToBlob } from "./commonFunctions";
-import { useAtom } from "jotai";
-import { imageObjUrlAtom } from "#/lib/atoms";
+import { OpenImageReturnObject } from "#/lib/types";
 
 function extractFileNameAndExtension(path: string): {
   fileName: string;
@@ -26,7 +25,9 @@ function extractFileNameAndExtension(path: string): {
   return { fileName: "", extension: "" };
 }
 
-export const openImageFile = async (): Promise<string | undefined> => {
+export const openImageFile = async (): Promise<
+  OpenImageReturnObject | undefined
+> => {
   const selectedFile = await dialogOpen({
     title: "Select Reference Image",
     filters: [
@@ -56,5 +57,10 @@ export const openImageFile = async (): Promise<string | undefined> => {
     binaryContent
   );
   const imageBlob = uint8arrayToBlob(binaryContent, extension);
-  return URL.createObjectURL(imageBlob);
+
+  return {
+    imageName: fileName,
+    imageExtension: extension,
+    imageObjectUrl: URL.createObjectURL(imageBlob),
+  };
 };

@@ -8,7 +8,6 @@ import { useAtom } from "jotai";
 import { useState } from "react";
 import { toast } from "sonner";
 import { openImageFile } from "#/functions/tauriFunctions";
-import Image from "next/image";
 import ImageComponent from "#/components/image-component";
 
 export default function Home() {
@@ -81,11 +80,14 @@ export default function Home() {
   // };
 
   const openImageTest = async () => {
-    const url = await openImageFile();
-    if (!url) {
+    const imageObj = await openImageFile();
+    if (!imageObj) {
       return;
     }
-    setImageObjUrl(url);
+    setImageObjUrl((prevUrl) => {
+      URL.revokeObjectURL((prevUrl ??= ""));
+      return imageObj.imageObjectUrl;
+    });
   };
 
   return (

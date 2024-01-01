@@ -1,4 +1,4 @@
-import SearchByTextMenu from "#/components/sbt-menu";
+import SearchControlMenu from "#/components/search-control-menu";
 import { Separator } from "#/components/ui/separator";
 
 export default function SearchByText() {
@@ -14,7 +14,7 @@ export default function SearchByText() {
       </div>
       <div className="flex flex-col w-full items-center">
         <Separator className="my-4" />
-        <SearchByTextMenu />
+        <SearchControlMenu mode="IMAGE" />
       </div>
     </div>
   );
