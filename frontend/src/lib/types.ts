@@ -7,7 +7,7 @@ interface GeneralApiResponse {
   error?: string;
 }
 
-interface IndexData {
+export interface IndexData {
   index_id: string;
   index_path: string;
   index_status: number;
@@ -43,6 +43,7 @@ export interface IHttpFunction {
   query?: { [key: string]: string | number | undefined };
   body?: any;
   method?: string;
+  headers?: { [key: string]: string };
 }
 
 export const textSearchSchema = z.object({
@@ -75,4 +76,10 @@ export interface OpenImageReturnObject {
   imageName: string;
   imageExtension: string;
   imageObjectUrl: string;
+}
+
+export interface OpenDirectoryReturnObject {
+  directoryPath: string;
+  directoryDisplayString: string;
+  escapedDirectoryPath: string;
 }

@@ -1,6 +1,5 @@
 import { ping } from "#/functions/apiFunctions";
-import { atom } from "jotai";
-import { atomWithQuery } from "jotai-tanstack-query";
+import { atomWithMutation, atomWithQuery } from "jotai-tanstack-query";
 
 export const pingAtom = atomWithQuery(() => ({
   queryKey: ["ping"],
@@ -10,4 +9,6 @@ export const pingAtom = atomWithQuery(() => ({
   refetchOnMount: true,
 }));
 
-export const imageObjUrlAtom = atom<string | null>(null);
+export const indexDirectoryAtom = atomWithMutation(() => ({
+  mutationKey: ["indexDirectory"],
+}));

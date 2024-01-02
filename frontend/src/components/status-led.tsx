@@ -1,15 +1,27 @@
 "use client";
+
 import { cn } from "#/lib/utils";
-import { useAtom } from "jotai";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   TooltipProvider,
 } from "./ui/tooltip";
-import { pingAtom } from "#/lib/atoms";
+import { useQuery } from "@tanstack/react-query";
+import { getIndexes, ping } from "#/functions/apiFunctions";
 export default function StatusLed() {
-  const [{ data }] = useAtom(pingAtom);
+  const { data, isSuccess } = useQuery({
+    queryKey: ["ping"],
+    queryFn: ping,
+    retry: true,
+    retryDelay: 2000,
+    refetchOnMount: true,
+  });
+  const _ = useQuery({
+    queryKey: ["getAllIndexes"],
+    queryFn: getIndexes,
+    enabled: isSuccess,
+  });
 
   return (
     <div className="flex items-center gap-1">

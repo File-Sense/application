@@ -2,11 +2,12 @@ import { Inter as FontSans } from "next/font/google";
 import "../styles/globals.css";
 import { cn } from "#/lib/utils";
 import { ThemeProvider } from "#/components/providers/theme-provider";
-import { ThemeToggle } from "#/components/theme-toggle";
 import StatusLed from "#/components/status-led";
 import ReactQueryProvider from "#/components/providers/reactquery-provider";
 import { NavigationMenuDemo } from "#/components/menu";
 import SettingsMenu from "#/components/settings-menu";
+import IndexManagementSheet from "#/components/index-management-sheet";
+import { Toaster } from "#/components/ui/sonner";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
               <div className="md:w-20 lg:w-28"></div>
               <NavigationMenuDemo />
               <div className=" flex justify-self-end items-center gap-2">
+                <IndexManagementSheet />
                 <StatusLed />
                 <SettingsMenu />
               </div>
@@ -40,6 +42,7 @@ export default function RootLayout({
               <main className="flex flex-col flex-1 px-10 pt-4">
                 {children}
               </main>
+              <Toaster />
             </div>
           </ThemeProvider>
         </ReactQueryProvider>

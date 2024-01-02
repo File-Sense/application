@@ -92,8 +92,8 @@
         "resizable": true,
         "title": "File Sense",
         "width": 800,
-        "minWidth": 800,
-        "minHeight": 600,
+        "minWidth": 900,
+        "minHeight": 700,
         "visible": false
       },
       {

@@ -2,60 +2,34 @@
 
 import { open as dialogOpen } from "@tauri-apps/api/dialog";
 import { readBinaryFile } from "@tauri-apps/api/fs";
-import { uint8arrayToBlob } from "./commonFunctions";
-import { OpenImageReturnObject } from "#/lib/types";
-
-function extractFileNameAndExtension(path: string): {
-  fileName: string;
-  extension: string;
-} {
-  const match = path.match(/\\([^\\]+(\.[^\\]+)?)$/);
-
-  if (match) {
-    const fileNameWithExtension = match[1];
-    const lastDotIndex = fileNameWithExtension.lastIndexOf(".");
-
-    if (lastDotIndex !== -1) {
-      const fileName = fileNameWithExtension.substring(0, lastDotIndex);
-      const extension = fileNameWithExtension.substring(lastDotIndex + 1);
-      return { fileName, extension };
-    }
-  }
-
-  return { fileName: "", extension: "" };
-}
+import {
+  extractFileNameAndExtension,
+  pathReplace,
+  pathToDisplayPath,
+  uint8arrayToBlob,
+} from "./commonFunctions";
+import { OpenDirectoryReturnObject, OpenImageReturnObject } from "#/lib/types";
+import { homeDir } from "@tauri-apps/api/path";
 
 export const openImageFile = async (): Promise<
-  OpenImageReturnObject | undefined
+  OpenImageReturnObject | false
 > => {
   const selectedFile = await dialogOpen({
     title: "Select Reference Image",
     filters: [
       {
         name: "Images",
-        extensions: ["jpg", "png", "gif"],
+        extensions: ["jpg", "png", "jpeg"],
       },
     ],
   });
   if (!selectedFile) {
-    return;
+    return false;
   }
   const { fileName, extension } = extractFileNameAndExtension(
     selectedFile as string
   );
-  console.log(
-    "🤬 ~ file: tauriFunctions.ts:40 ~ openImageFile ~ fileName:",
-    fileName
-  );
-  console.log(
-    "🤬 ~ file: tauriFunctions.ts:40 ~ openImageFile ~ extension:",
-    extension
-  );
   const binaryContent = await readBinaryFile(selectedFile as string);
-  console.log(
-    "🤬 ~ file: tauriFunctions.ts:51 ~ openImageFile ~ binaryContent:",
-    binaryContent
-  );
   const imageBlob = uint8arrayToBlob(binaryContent, extension);
 
   return {
@@ -63,4 +37,28 @@ export const openImageFile = async (): Promise<
     imageExtension: extension,
     imageObjectUrl: URL.createObjectURL(imageBlob),
   };
+};
+
+export const openDirectory = async (): Promise<
+  OpenDirectoryReturnObject | false
+> => {
+  const selectedDirectory = await dialogOpen({
+    title: "Select a Directory for Indexing",
+    directory: true,
+    defaultPath: await homeDir(),
+  });
+  if (!selectedDirectory) {
+    return false;
+  }
+  console.log(
+    "🤬 ~ file: tauriFunctions.ts:71 ~ selectedDirectory:",
+    selectedDirectory
+  );
+  const escapedPath = pathReplace(selectedDirectory as string);
+  const displayPath = pathToDisplayPath(selectedDirectory as string);
+  return {
+    directoryPath: selectedDirectory as string,
+    escapedDirectoryPath: escapedPath,
+    directoryDisplayString: displayPath,
+  } as OpenDirectoryReturnObject;
 };

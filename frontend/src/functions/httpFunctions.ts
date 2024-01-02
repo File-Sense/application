@@ -29,7 +29,7 @@ const queryToUrl = (query: {
 export const httpFunction = async (
   requestConfig: IHttpFunction
 ): Promise<any> => {
-  const { request, params, query, body, method } = requestConfig;
+  const { request, params, query, body, method, headers } = requestConfig;
   const url =
     BASE_URL +
     request +
@@ -38,6 +38,9 @@ export const httpFunction = async (
   const response = await fetch(url, {
     method: method || "GET",
     body: body || null,
+    headers: headers || {
+      "Content-Type": "application/json",
+    },
     next: {
       revalidate: 0,
     },

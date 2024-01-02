@@ -1,33 +1,25 @@
 "use client";
+
 import { Button } from "#/components/ui/button";
-import { imageObjUrlAtom, pingAtom } from "#/lib/atoms";
 import { invoke } from "@tauri-apps/api/tauri";
-import { open } from "@tauri-apps/api/dialog";
-import { homeDir } from "@tauri-apps/api/path";
-import { useAtom } from "jotai";
 import { useState } from "react";
 import { toast } from "sonner";
-import { openImageFile } from "#/functions/tauriFunctions";
+import { openDirectory, openImageFile } from "#/functions/tauriFunctions";
 import ImageComponent from "#/components/image-component";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ping } from "#/functions/apiFunctions";
 
 export default function Home() {
+  const queryClient = useQueryClient();
   const [text, setText] = useState<string | undefined>();
-  const [imageObjUrl, setImageObjUrl] = useAtom(imageObjUrlAtom);
+  const [imageObjUrl, setImageObjUrl] = useState<string | undefined>();
   const [selectedDirectory, setSelectedDirectory] = useState<string | null>(
     null
   );
-  const [{ data, isSuccess }] = useAtom(pingAtom);
-  function functionx(inputPath: string): string {
-    // Use the replace method to replace single backslashes with double backslashes
-    const escapedPath = inputPath.replace(/\\/g, "\\\\");
-    return escapedPath;
-  }
-  // const {} = useQuery({
-  //   queryKey: ["PING"],
-  //   queryFn: ping,
-  //   refetchInterval: 2000,
-  //   retry: true,
-  // });
+  const { data, isSuccess } = useQuery({
+    queryKey: ["ping"],
+    queryFn: ping,
+  });
 
   const handleClick = async () => {
     console.log("🤬 ~ file: page.tsx:11 ~ Home ~ data:", data?.ping);
@@ -37,16 +29,11 @@ export default function Home() {
   };
 
   const dirSelectorClick = async () => {
-    const selectedDir = await open({
-      title: "Select a Directory for Indexing",
-      directory: true,
-      defaultPath: await homeDir(),
-    });
-    if (!selectedDir) {
+    const data = await openDirectory();
+    if (!data) {
       return;
     }
-    const t = functionx(selectedDir as string);
-    setSelectedDirectory(t);
+    setSelectedDirectory(data.escapedDirectoryPath);
   };
 
   const openImageInFilemanager = async () => {
@@ -57,27 +44,6 @@ export default function Home() {
       toast.error("This Feature is not supported on your OS");
     }
   };
-
-  // const openImageFile = async () => {
-  //   const selectedFile = await open({
-  //     title: "Select Reference Image",
-  //     filters: [
-  //       {
-  //         name: "Images",
-  //         extensions: ["jpg", "png", "gif"],
-  //       },
-  //     ],
-  //   });
-  //   console.log(
-  //     "🤬 ~ file: page.tsx:69 ~ openImageFile ~ selectedFile:",
-  //     selectedFile
-  //   );
-  //   if (!selectedFile) {
-  //     return;
-  //   }
-  //   const contents = await readBinaryFile(selectedFile as string);
-  //   console.log("🤬 ~ file: page.tsx:73 ~ openImageFile ~ contents:", contents);
-  // };
 
   const openImageTest = async () => {
     const imageObj = await openImageFile();

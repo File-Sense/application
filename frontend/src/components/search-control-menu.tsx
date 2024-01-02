@@ -3,8 +3,13 @@
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Textarea } from "./ui/textarea";
-import { FolderSearch, ChevronsUpDownIcon, CheckIcon } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
+import {
+  FolderSearch,
+  ChevronsUpDownIcon,
+  CheckIcon,
+  RotateCwIcon,
+} from "lucide-react";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Command,
@@ -35,9 +40,9 @@ import {
   textSearchSchema,
 } from "#/lib/types";
 import { Input } from "./ui/input";
-import { toast } from "sonner";
-import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { openImageFile } from "#/functions/tauriFunctions";
+import { useState } from "react";
 
 const languages = [
   { label: "English", value: "en" },
@@ -56,6 +61,15 @@ export default function SearchControlMenu({
 }: {
   mode: "TEXT" | "IMAGE";
 }) {
+  const queryClient = useQueryClient();
+  const { isFetching } = useQuery({
+    queryKey: ["openImageFile"],
+    queryFn: openImageFile,
+    enabled: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
   const [imageObj, setImageObj] = useState<OpenImageReturnObject | undefined>();
   const form = useForm<searchControlSchemas>({
     resolver: zodResolver(
@@ -64,14 +78,17 @@ export default function SearchControlMenu({
     defaultValues: {
       nor: 3,
     },
-    mode: "onChange",
+    mode: "all",
   });
   function onSubmit(data: searchControlSchemas) {
     console.log("🚀 ~ file: page.tsx:56 ~ onSubmit ~ data:", data);
   }
 
-  const openImageTest = async () => {
-    const imageObj = await openImageFile();
+  const openImage = async () => {
+    const imageObj = await queryClient.fetchQuery({
+      queryKey: ["openImageFile"],
+      queryFn: openImageFile,
+    });
     if (!imageObj) {
       return;
     }
@@ -88,10 +105,10 @@ export default function SearchControlMenu({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-row gap-4 w-full justify-center"
+        className="flex flex-row gap-4 w-full justify-center my-5"
       >
         <div className="flex flex-col gap-4 lg:w-[60%]">
-          <div className="flex flex-row gap-4 w-full items-start justify-center">
+          <div className="flex flex-row gap-4 w-full items-start ">
             <FormField
               control={form.control}
               name="index"
@@ -183,12 +200,19 @@ export default function SearchControlMenu({
                     <FormLabel>Reference Image</FormLabel>
                     <FormControl>
                       <div
-                        onClick={openImageTest}
-                        className="cursor-pointer text-muted-foreground dark:hover:bg-slate-800 dark:hover:text-slate-50 flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                        onClick={openImage}
+                        className="cursor-pointer text-muted-foreground dark:hover:bg-slate-800 dark:hover:text-slate-50 flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
                       >
                         <div className="flex flex-row">
-                          <span className="font-semibold">Choose Image: </span>
-                          {imageObj && imageObj.imageName}
+                          <span className="flex items-center font-semibold">
+                            Choose Image: &nbsp;
+                            {isFetching && (
+                              <RotateCwIcon className="h-4 w-4 animate-spin" />
+                            )}
+                          </span>
+                          {imageObj &&
+                            !isFetching &&
+                            `${imageObj?.imageName}.${imageObj?.imageExtension}`}
                         </div>
                         <Input className="hidden" type="text" {...field} />
                       </div>
