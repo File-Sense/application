@@ -40,6 +40,9 @@ export default function IndexManagementSheet() {
       toast.success("Indexing started");
       queryClient.invalidateQueries({ queryKey: ["getAllIndexes"] });
     },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   const onOpenDirectoryClick = async () => {
@@ -58,6 +61,7 @@ export default function IndexManagementSheet() {
       return;
     }
     indexDirectoryAsync(data.escapedDirectoryPath);
+    queryClient.removeQueries({ queryKey: ["openDirectory"] });
   };
 
   return (

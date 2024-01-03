@@ -16,11 +16,13 @@ export default function StatusLed() {
     retry: true,
     retryDelay: 2000,
     refetchOnMount: true,
+    staleTime: 1000 * 60 * 2,
   });
   const _ = useQuery({
     queryKey: ["getAllIndexes"],
     queryFn: getIndexes,
     enabled: isSuccess,
+    placeholderData: { data: [] },
   });
 
   return (

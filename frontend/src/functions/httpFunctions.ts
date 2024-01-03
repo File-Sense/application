@@ -45,9 +45,9 @@ export const httpFunction = async (
       revalidate: 0,
     },
   });
-  if (!response.ok) {
-    throw new Error("HTTP Error: " + response.status);
-  }
   const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || "Something went wrong");
+  }
   return data;
 };

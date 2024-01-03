@@ -10,6 +10,10 @@ export default function IndexesPanel() {
   const { data: indexData, isError } = useQuery({
     queryKey: ["getAllIndexes"],
     queryFn: getIndexes,
+    refetchInterval: (query) =>
+      query.state.data?.data.every((index) => index.index_status === 0)
+        ? false
+        : 2000,
   });
 
   if (isError) {

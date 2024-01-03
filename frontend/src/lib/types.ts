@@ -7,10 +7,12 @@ interface GeneralApiResponse {
   error?: string;
 }
 
+type RangeType = -1 | 0 | 1;
+
 export interface IndexData {
   index_id: string;
   index_path: string;
-  index_status: number;
+  index_status: RangeType;
   id: number;
 }
 
