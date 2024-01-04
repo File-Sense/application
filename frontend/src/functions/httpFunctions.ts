@@ -19,7 +19,7 @@ const queryToUrl = (query: {
 }): string => {
   let url = "?";
   for (const key in query) {
-    if (!query[key]) {
+    if (query[key] !== undefined) {
       url += `${key}=${query[key]}&`;
     }
   }

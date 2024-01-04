@@ -43,24 +43,23 @@ import { Input } from "./ui/input";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { openImageFile } from "#/functions/tauriFunctions";
 import { useState } from "react";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
+import {
+  getIndexes,
+  searchByImage,
+  searchByText,
+} from "#/functions/apiFunctions";
+import { pathToDisplayPath } from "#/functions/commonFunctions";
+import { useAtom } from "jotai";
+import { fetchedPathsAtom, refImageAtom } from "#/lib/atoms";
+import { set } from "zod";
 
 export default function SearchControlMenu({
   mode,
 }: {
   mode: "TEXT" | "IMAGE";
 }) {
+  const [, setFetchedPaths] = useAtom(fetchedPathsAtom);
+  const [, setRefImage] = useAtom(refImageAtom);
   const queryClient = useQueryClient();
   const { isFetching } = useQuery({
     queryKey: ["openImageFile"],
@@ -69,6 +68,11 @@ export default function SearchControlMenu({
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+  });
+  const { data: index_list } = useQuery({
+    queryKey: ["getAllIndexes"],
+    queryFn: getIndexes,
+    placeholderData: { data: [] },
   });
   const [imageObj, setImageObj] = useState<OpenImageReturnObject | undefined>();
   const form = useForm<searchControlSchemas>({
@@ -80,8 +84,46 @@ export default function SearchControlMenu({
     },
     mode: "all",
   });
-  function onSubmit(data: searchControlSchemas) {
-    console.log("🚀 ~ file: page.tsx:56 ~ onSubmit ~ data:", data);
+  async function onSubmit(data: searchControlSchemas) {
+    if ("searchPhrase" in data) {
+      const { data: fPaths } = await queryClient.fetchQuery({
+        queryKey: ["sbt"],
+        queryFn: () =>
+          searchByText({
+            index_name: data.index,
+            search_string: data.searchPhrase,
+            limit: data.nor,
+          }),
+      });
+      setFetchedPaths(fPaths || []);
+      form.reset({
+        searchPhrase: "",
+      });
+    } else if ("refImage" in data) {
+      const formData = new FormData();
+      if (imageObj) {
+        formData.append(
+          "image",
+          imageObj.imageBlob,
+          "image." + imageObj.imageExtension
+        );
+      }
+      const { data: fPaths } = await queryClient.fetchQuery({
+        queryKey: ["sbi"],
+        queryFn: () =>
+          searchByImage({
+            index_name: data.index,
+            ref_image: formData,
+            limit: data.nor,
+          }),
+      });
+      setFetchedPaths(fPaths || []);
+      setImageObj(undefined);
+      form.reset({
+        refImage: "",
+      });
+    }
+    form.reset();
   }
 
   const openImage = async () => {
@@ -98,6 +140,12 @@ export default function SearchControlMenu({
         URL.revokeObjectURL(prevImgObj.imageObjectUrl);
       }
       return imageObj;
+    });
+    setRefImage((prevUrl) => {
+      if (prevUrl) {
+        URL.revokeObjectURL(prevUrl);
+      }
+      return imageObj.imageObjectUrl;
     });
   };
 
@@ -127,9 +175,11 @@ export default function SearchControlMenu({
                           )}
                         >
                           {field.value
-                            ? languages.find(
-                                (language) => language.value === field.value
-                              )?.label
+                            ? pathToDisplayPath(
+                                index_list?.data.find(
+                                  (index) => index.index_id === field.value
+                                )?.index_path ?? ""
+                              )
                             : "Select Index"}
                           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -143,19 +193,19 @@ export default function SearchControlMenu({
                         />
                         <CommandEmpty>No Index found.</CommandEmpty>
                         <CommandGroup>
-                          {languages.map((language) => (
+                          {index_list?.data.map((index) => (
                             <CommandItem
-                              value={language.label}
-                              key={language.value}
+                              value={index.index_id}
+                              key={pathToDisplayPath(index.index_path)}
                               onSelect={() => {
-                                form.setValue("index", language.value);
+                                form.setValue("index", index.index_id);
                               }}
                             >
-                              {language.label}
+                              {pathToDisplayPath(index.index_path)}
                               <CheckIcon
                                 className={cn(
                                   "ml-auto h-4 w-4",
-                                  language.value === field.value
+                                  index.index_id === field.value
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}

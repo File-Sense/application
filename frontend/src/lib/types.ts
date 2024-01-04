@@ -31,11 +31,17 @@ export interface ISearchByText {
   search_string: string;
 }
 
+export interface ISearchByImage {
+  index_name: string;
+  limit?: number;
+  ref_image: FormData;
+}
+
 export interface IndexDirectoryResponse extends GeneralApiResponse {
   index_id?: string;
 }
 
-export interface SearchByTextResponse extends GeneralApiResponse {
+export interface SearchByTextAndImageResponse extends GeneralApiResponse {
   data?: string[];
 }
 
@@ -44,7 +50,7 @@ export interface IHttpFunction {
   params?: string[];
   query?: { [key: string]: string | number | undefined };
   body?: any;
-  method?: string;
+  method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: { [key: string]: string };
 }
 
@@ -52,9 +58,12 @@ export const textSearchSchema = z.object({
   index: z.string({
     required_error: "Please select an index.",
   }),
-  searchPhrase: z.string().min(10, {
-    message: "Search Phrase must be at least 10 characters.",
-  }),
+  searchPhrase: z
+    .string()
+    .min(10, {
+      message: "Search Phrase must be at least 10 characters.",
+    })
+    .default(""),
   nor: z.number().min(1).max(25).default(3),
 });
 
@@ -68,9 +77,10 @@ export const imageSearchSchema = z.object({
   nor: z.number().min(1).max(25).default(3),
 });
 
-export type searchControlSchemas =
-  | z.infer<typeof textSearchSchema>
-  | z.infer<typeof imageSearchSchema>;
+type TextSearchSchema = z.infer<typeof textSearchSchema>;
+type ImageSearchSchema = z.infer<typeof imageSearchSchema>;
+
+export type searchControlSchemas = TextSearchSchema | ImageSearchSchema;
 
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
@@ -78,6 +88,7 @@ export interface OpenImageReturnObject {
   imageName: string;
   imageExtension: string;
   imageObjectUrl: string;
+  imageBlob: Blob;
 }
 
 export interface OpenDirectoryReturnObject {

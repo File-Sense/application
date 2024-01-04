@@ -1,3 +1,6 @@
+"use client";
+import { readBinaryFile } from "@tauri-apps/api/fs";
+
 export const uint8arrayToBlob = (
   binaryContent: Uint8Array,
   extension: string
@@ -41,4 +44,14 @@ export const extractFileNameAndExtension = (
   }
 
   return { fileName: "", extension: "" };
+};
+
+export const getImageObjectUrl = async (
+  path: string
+): Promise<string | false> => {
+  path = pathReplace(path);
+  const { extension } = extractFileNameAndExtension(path);
+  const binaryContent = await readBinaryFile(path);
+  const imageBlob = uint8arrayToBlob(binaryContent, extension);
+  return URL.createObjectURL(imageBlob);
 };

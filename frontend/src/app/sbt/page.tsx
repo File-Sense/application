@@ -10,9 +10,13 @@ export default function SearchByText() {
       <div className="flex flex-col justify-start w-full">
         <h3 className="text-2xl font-semibold">Search By Text</h3>
         <p className="text-xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa numquam
-          minus tempora doloribus omnis ipsam provident voluptatem quis sint
-          dicta, porro, error eos aut eius iste enim commodi praesentium illo!
+          Explore the power of visual search with our innovative image retrieval
+          system based on textual meaning. Effortlessly find the perfect images
+          by describing what you're looking for in words. Our cutting-edge
+          technology interprets and matches your textual queries to deliver
+          precise and relevant visual results. Simplify your search experience
+          and discover the images that speak to your desired concepts, all with
+          the ease of descriptive language.
         </p>
       </div>
       <div className="flex flex-col w-full items-center">

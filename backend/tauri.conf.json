@@ -32,7 +32,7 @@
         "removeDir": false,
         "removeFile": false,
         "renameFile": false,
-        "scope": ["$RESOURCE/engine/*"],
+        "scope": ["**"],
         "writeFile": false
       },
       "dialog": {

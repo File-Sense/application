@@ -7,7 +7,7 @@ import { MoonIcon, SunIcon } from "lucide-react";
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const { setTheme, theme } = useTheme();
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     setMounted(true);

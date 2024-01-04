@@ -1,9 +1,15 @@
 "use client";
 
+import { useAtom } from "jotai";
 import ImageComponent from "./image-component";
 import { ScrollArea } from "./ui/scroll-area";
+import { fetchedPathsAtom } from "#/lib/atoms";
 
 export default function ImagesPanel() {
+  const [fetchedPaths, _] = useAtom(fetchedPathsAtom);
+  if (fetchedPaths.length === 0) {
+    return <></>;
+  }
   return (
     <ScrollArea className="max-h-64 lg:max-h-[500px] rounded-md border">
       <div className="flex flex-col w-full items-center p-4">
@@ -11,7 +17,9 @@ export default function ImagesPanel() {
           Search Results
         </h4>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 items-center">
-          <ImageComponent imageObjUrl="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" />
+          {fetchedPaths.map((path, idx) => (
+            <ImageComponent key={idx} imagePath={path} />
+          ))}
         </div>
       </div>
     </ScrollArea>

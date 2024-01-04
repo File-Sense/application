@@ -62,7 +62,7 @@ export default function Home() {
       className="flex flex-col items-center justify-between pt-5"
     >
       <div>Test Page</div>
-      {text && <div>{text}</div>}
+      {/* {text && <div>{text}</div>}
       <Button onClick={handleClick}>Click Me</Button>
       <Button onClick={dirSelectorClick}>Open Directory</Button>
       <div>Selected Dir: {selectedDirectory ? selectedDirectory : ""}</div>
@@ -70,14 +70,13 @@ export default function Home() {
       <Button disabled={!isSuccess} onClick={openImageTest}>
         Open Image File
       </Button>
-      {imageObjUrl && <ImageComponent imageObjUrl={imageObjUrl} />}
       <Button
         onClick={async () => {
           await invoke("set_index_state", { iState: true });
         }}
       >
         Set Indexing State
-      </Button>
+      </Button> */}
     </div>
   );
 }

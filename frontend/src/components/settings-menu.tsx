@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "#/components/ui/button";
 import {
   DropdownMenu,
@@ -23,7 +24,7 @@ import { useEffect, useState, useTransition } from "react";
 export default function SettingsMenu() {
   const [mounted, setMounted] = useState(false);
   const { setTheme, theme } = useTheme();
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   useEffect(() => {
     setMounted(true);

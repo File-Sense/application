@@ -36,6 +36,7 @@ export const openImageFile = async (): Promise<
     imageName: fileName,
     imageExtension: extension,
     imageObjectUrl: URL.createObjectURL(imageBlob),
+    imageBlob,
   };
 };
 

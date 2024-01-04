@@ -7,7 +7,8 @@ import {
   IndexDirectoryResponse,
   PingResponse,
   ISearchByText,
-  SearchByTextResponse,
+  SearchByTextAndImageResponse,
+  ISearchByImage,
 } from "#/lib/types";
 import { httpFunction } from "./httpFunctions";
 
@@ -54,11 +55,35 @@ export const getIndexStatus = async (
 
 export const searchByText = async (
   searchData: ISearchByText
-): Promise<SearchByTextResponse> => {
+): Promise<SearchByTextAndImageResponse> => {
   const config: IHttpFunction = {
     request: "/common/search_by_text",
     query: { ...searchData },
   };
   const data = await httpFunction(config);
   return data;
+};
+
+export const searchByImage = async ({
+  ref_image,
+  ...searchData
+}: ISearchByImage): Promise<SearchByTextAndImageResponse> => {
+  const config: IHttpFunction = {
+    request: "/common/search_by_image",
+    method: "POST",
+    body: ref_image,
+    query: { ...searchData },
+    headers: {},
+  };
+  const data = await httpFunction(config);
+  return data;
+};
+
+export const deleteIndex = async (indexId: string): Promise<void> => {
+  const config: IHttpFunction = {
+    request: "/common/delete_index",
+    method: "DELETE",
+    query: { index_id: indexId },
+  };
+  await httpFunction(config);
 };
