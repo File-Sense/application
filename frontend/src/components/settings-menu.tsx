@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "#/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu";
-import { SheetTrigger } from "./ui/sheet";
+import { useTheme } from "./providers/theme-provider";
 import {
   Tooltip,
   TooltipContent,
@@ -18,7 +16,6 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { Settings, Moon, Sun, HelpCircle, TestTube2 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { useEffect, useState, useTransition } from "react";
 
 export default function SettingsMenu() {

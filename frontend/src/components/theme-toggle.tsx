@@ -1,8 +1,7 @@
-"use client";
 import { useTransition, useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "./providers/theme-provider";
 
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);

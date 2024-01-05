@@ -1,5 +1,3 @@
-"use client";
-
 import {
   GetAllIndexesResponse,
   GetIndexStatusResponse,
@@ -17,7 +15,7 @@ export const ping = async (): Promise<PingResponse> => {
     request: "/ping",
   };
   const data = await httpFunction(config);
-  return data;
+  return data as PingResponse;
 };
 
 export const indexDirectory = async (
@@ -31,7 +29,7 @@ export const indexDirectory = async (
     }),
   };
   const data = await httpFunction(config);
-  return data;
+  return data as IndexDirectoryResponse;
 };
 
 export const getIndexes = async (): Promise<GetAllIndexesResponse> => {
@@ -39,7 +37,7 @@ export const getIndexes = async (): Promise<GetAllIndexesResponse> => {
     request: "/database/get_all_index",
   };
   const data = await httpFunction(config);
-  return data;
+  return data as GetAllIndexesResponse;
 };
 
 export const getIndexStatus = async (
@@ -50,7 +48,7 @@ export const getIndexStatus = async (
     params: [indexId],
   };
   const data = await httpFunction(config);
-  return data;
+  return data as GetIndexStatusResponse;
 };
 
 export const searchByText = async (
@@ -61,7 +59,7 @@ export const searchByText = async (
     query: { ...searchData },
   };
   const data = await httpFunction(config);
-  return data;
+  return data as SearchByTextAndImageResponse;
 };
 
 export const searchByImage = async ({
@@ -76,7 +74,7 @@ export const searchByImage = async ({
     headers: {},
   };
   const data = await httpFunction(config);
-  return data;
+  return data as SearchByTextAndImageResponse;
 };
 
 export const deleteIndex = async (indexId: string): Promise<void> => {

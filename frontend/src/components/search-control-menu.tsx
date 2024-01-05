@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { Textarea } from "./ui/textarea";
@@ -51,7 +49,6 @@ import {
 import { pathToDisplayPath } from "#/functions/commonFunctions";
 import { useAtom } from "jotai";
 import { fetchedPathsAtom, refImageAtom } from "#/lib/atoms";
-import { set } from "zod";
 
 export default function SearchControlMenu({
   mode,

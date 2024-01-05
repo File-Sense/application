@@ -1,4 +1,3 @@
-"use client";
 import { readBinaryFile } from "@tauri-apps/api/fs";
 
 export const uint8arrayToBlob = (

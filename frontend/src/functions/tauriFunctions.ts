@@ -1,5 +1,3 @@
-"use client";
-
 import { open as dialogOpen } from "@tauri-apps/api/dialog";
 import { readBinaryFile } from "@tauri-apps/api/fs";
 import {
@@ -51,10 +49,6 @@ export const openDirectory = async (): Promise<
   if (!selectedDirectory) {
     return false;
   }
-  console.log(
-    "🤬 ~ file: tauriFunctions.ts:71 ~ selectedDirectory:",
-    selectedDirectory
-  );
   const escapedPath = pathReplace(selectedDirectory as string);
   const displayPath = pathToDisplayPath(selectedDirectory as string);
   return {

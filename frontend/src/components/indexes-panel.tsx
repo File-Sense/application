@@ -1,5 +1,3 @@
-"use client";
-
 import { useQuery } from "@tanstack/react-query";
 import IndexComponent from "./index-component";
 import { ScrollArea } from "./ui/scroll-area";

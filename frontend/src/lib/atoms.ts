@@ -1,7 +1,6 @@
 import { ping } from "#/functions/apiFunctions";
 import { atom } from "jotai";
 import { atomWithQuery } from "jotai-tanstack-query";
-import { string } from "zod";
 
 export const pingAtom = atomWithQuery(() => ({
   queryKey: ["ping"],

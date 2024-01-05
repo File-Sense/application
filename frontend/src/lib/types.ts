@@ -49,7 +49,7 @@ export interface IHttpFunction {
   request: string;
   params?: string[];
   query?: { [key: string]: string | number | undefined };
-  body?: any;
+  body?: BodyInit | null | undefined;
   method?: "GET" | "POST" | "PUT" | "DELETE";
   headers?: { [key: string]: string };
 }

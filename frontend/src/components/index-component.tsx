@@ -1,5 +1,3 @@
-"use client";
-
 import { ReactNode, useState } from "react";
 import { Badge } from "./ui/badge";
 import { IndexData } from "#/lib/types";

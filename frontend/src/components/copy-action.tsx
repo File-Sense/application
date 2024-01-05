@@ -1,5 +1,3 @@
-"use client";
-
 import { useCopyToClipboard } from "#/lib/hooks/useCopyToClipboard";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { Button } from "./ui/button";

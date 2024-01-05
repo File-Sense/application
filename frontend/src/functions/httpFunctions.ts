@@ -1,5 +1,3 @@
-"use client";
-
 import { IHttpFunction } from "#/lib/types";
 const BASE_URL = "http://127.0.0.1:5000/api";
 const paramsToUrl = (params: string[]): string => {
@@ -28,7 +26,7 @@ const queryToUrl = (query: {
 
 export const httpFunction = async (
   requestConfig: IHttpFunction
-): Promise<any> => {
+): Promise<unknown> => {
   const { request, params, query, body, method, headers } = requestConfig;
   const url =
     BASE_URL +
@@ -40,9 +38,6 @@ export const httpFunction = async (
     body: body || null,
     headers: headers || {
       "Content-Type": "application/json",
-    },
-    next: {
-      revalidate: 0,
     },
   });
   const data = await response.json();

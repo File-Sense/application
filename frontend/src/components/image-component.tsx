@@ -1,5 +1,3 @@
-"use client";
-
 import {
   extractFileNameAndExtension,
   getImageObjectUrl,
@@ -7,7 +5,6 @@ import {
 } from "#/functions/commonFunctions";
 import { useQuery } from "@tanstack/react-query";
 import { FolderTreeIcon, Loader2 } from "lucide-react";
-import Image from "next/image";
 import CopyAction from "./copy-action";
 import { invoke } from "@tauri-apps/api/tauri";
 export default function ImageComponent({ imagePath }: { imagePath: string }) {
@@ -34,12 +31,10 @@ export default function ImageComponent({ imagePath }: { imagePath: string }) {
             <Loader2 className="animate-spin" size={50} />
           </div>
         ) : imageURL ? (
-          <Image
+          <img
             className="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125"
             src={imageURL}
             alt={fileName}
-            width={100}
-            height={100}
           />
         ) : (
           <div className="h-full w-full flex items-center justify-center">

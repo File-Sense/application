@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "#/lib/utils";
 import {
   Tooltip,
@@ -18,7 +16,8 @@ export default function StatusLed() {
     refetchOnMount: true,
     staleTime: 1000 * 60 * 2,
   });
-  const _ = useQuery({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  useQuery({
     queryKey: ["getAllIndexes"],
     queryFn: getIndexes,
     enabled: isSuccess,

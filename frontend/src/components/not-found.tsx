@@ -1,7 +1,6 @@
-"use client";
 import { Button } from "#/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
@@ -10,7 +9,7 @@ export default function NotFound() {
         <div className="text-center text-4xl font-bold text-white pt-20">
           <div className="text-primary-500 text-8xl">404</div>
           <div>Not Found!</div>
-          <Link href="/">
+          <Link to="/" replace>
             <Button color="primary" className="mt-7">
               <ArrowBigLeft />
               back to Home

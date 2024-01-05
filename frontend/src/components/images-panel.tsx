@@ -1,11 +1,10 @@
-"use client";
-
 import { useAtom } from "jotai";
 import ImageComponent from "./image-component";
 import { ScrollArea } from "./ui/scroll-area";
 import { fetchedPathsAtom } from "#/lib/atoms";
 
 export default function ImagesPanel() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fetchedPaths, _] = useAtom(fetchedPathsAtom);
   if (fetchedPaths.length === 0) {
     return <></>;
