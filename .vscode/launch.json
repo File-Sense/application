@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tauri Development Debug",
+      "cargo": {
+        "args": [
+          "build",
+          "--manifest-path=./backend/Cargo.toml",
+          "--no-default-features"
+        ]
+      },
+      "preLaunchTask": "ui:dev"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Tauri Production Debug",
+      "cargo": {
+        "args": [
+          "build",
+          "--release",
+          "--manifest-path=./backend/Cargo.toml"
+        ]
+      },
+      "preLaunchTask": "ui:build"
+    },
+    {
+      "name": "Uvicorn Debug",
+      "type": "python",
+      "request": "launch",
+      "program": "engine/main.py",
+      "args": ["dev"],
+      
+    }
+  ]
+}

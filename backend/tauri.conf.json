@@ -1,29 +1,50 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "yarn build:PY && yarn build:App",
-    "beforeDevCommand": "yarn build:PY && yarn dev:App",
+    "beforeBuildCommand": "yarn build:App",
+    "beforeDevCommand": "yarn dev:CP && yarn dev:App",
     "devPath": "http://localhost:3000",
     "distDir": "../frontend/out"
   },
   "package": {
     "productName": "File Sense",
-    "version": "0.1.0"
+    "version": "0.0.1"
   },
   "tauri": {
+    "systemTray": {
+      "iconPath": "icons/32x32.png",
+      "iconAsTemplate": true
+    },
     "allowlist": {
       "all": false,
       "shell": {
         "all": false,
         "execute": false,
+        "open": true
+      },
+      "fs": {
+        "all": false,
+        "copyFile": false,
+        "createDir": false,
+        "exists": false,
+        "readDir": false,
+        "readFile": true,
+        "removeDir": false,
+        "removeFile": false,
+        "renameFile": false,
+        "scope": ["**"],
+        "writeFile": false
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
         "open": true,
-        "scope": [
-          {
-            "name": "bin/python/engine",
-            "sidecar": true
-          }
-        ],
-        "sidecar": true
+        "save": false
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -33,7 +54,6 @@
       "deb": {
         "depends": []
       },
-      "externalBin": ["bin/python/engine"],
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
@@ -41,7 +61,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "me.pasindu.filesense",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -50,7 +70,7 @@
         "providerShortName": null,
         "signingIdentity": null
       },
-      "resources": [],
+      "resources": ["engine/*"],
       "shortDescription": "",
       "targets": "all",
       "windows": {
@@ -71,7 +91,18 @@
         "height": 600,
         "resizable": true,
         "title": "File Sense",
-        "width": 800
+        "width": 800,
+        "minWidth": 900,
+        "minHeight": 700,
+        "visible": false
+      },
+      {
+        "width": 400,
+        "height": 200,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen",
+        "center": true
       }
     ]
   }
