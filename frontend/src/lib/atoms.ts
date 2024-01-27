@@ -15,3 +15,5 @@ export const globalIndexingStateAtom = atom(false);
 export const refImageAtom = atom<string | null>(null);
 
 export const fetchedPathsAtom = atom<string[]>([]);
+
+export const aboutFileSenseDialogStateAtom = atom(false);

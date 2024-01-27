@@ -1,6 +1,6 @@
 {
   "name": "file-sense",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A Semantic File Search Desktop Application",
   "scripts": {
     "postinstall": "node py-install.js && cd frontend && yarn",

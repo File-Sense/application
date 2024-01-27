@@ -2,10 +2,19 @@ import ImagesPanel from "#/components/images-panel";
 import SearchControlMenu from "#/components/search-control-menu";
 import { Separator } from "#/components/ui/separator";
 import { useAtom } from "jotai";
-import { refImageAtom } from "#/lib/atoms";
+import { fetchedPathsAtom, refImageAtom } from "#/lib/atoms";
+import { useEffect } from "react";
 
 export default function SearchByImage() {
-  const [refImage] = useAtom(refImageAtom);
+  const [refImage, setRefImage] = useAtom(refImageAtom);
+  const [, setFetchedPaths] = useAtom(fetchedPathsAtom);
+  useEffect(() => {
+    setFetchedPaths([]);
+    return () => {
+      setRefImage(null);
+    };
+  }, [setFetchedPaths, setRefImage]);
+
   return (
     <div className="flex flex-col items-center w-full">
       <div className="flex flex-col justify-start w-full">

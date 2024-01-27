@@ -43,8 +43,8 @@ export default function ImageComponent({ imagePath }: { imagePath: string }) {
         )}
       </div>
       <div className="absolute inset-0 flex translate-y-[100%] flex-col items-center justify-end text-center transition-all duration-500 group-hover:translate-y-0">
-        <div className="flex flex-col bg-black p-3">
-          <div className="flex items-center justify-start group">
+        <div className="flex flex-col bg-black p-3 items-center">
+          <div className="flex items-center justify-start group w-full">
             <p className="w-56 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 truncate">
               {fileName}
             </p>
@@ -58,7 +58,7 @@ export default function ImageComponent({ imagePath }: { imagePath: string }) {
           </div>
           <button
             onClick={openImageInFilemanager}
-            className="mt-4 flex flex-row items-center justify-center rounded-full bg-neutral-900 py-2 font-com text-sm capitalize text-white shadow shadow-black/60 transition hover:bg-neutral-300 hover:text-black"
+            className="mt-4 flex flex-row items-center justify-center rounded-full bg-neutral-900 py-2 font-com text-sm capitalize text-white shadow shadow-black/60 transition hover:bg-neutral-300 hover:text-black md:w-9/12 lg:w-11/12"
           >
             Open In File Explorer
             <FolderTreeIcon className="ml-2" size={18} />

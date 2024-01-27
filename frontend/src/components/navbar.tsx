@@ -1,3 +1,4 @@
+import AboutFileSense from "./about-file-sense";
 import IndexManagementSheet from "./index-management-sheet";
 import { NavigationMenuDemo } from "./menu";
 import SettingsMenu from "./settings-menu";
@@ -13,6 +14,7 @@ export default function NavBar() {
         <StatusLed />
         <SettingsMenu />
       </div>
+      <AboutFileSense />
     </div>
   );
 }

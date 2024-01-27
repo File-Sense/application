@@ -6,16 +6,11 @@ import {
   TooltipProvider,
 } from "./ui/tooltip";
 import { useQuery } from "@tanstack/react-query";
-import { getIndexes, ping } from "#/functions/apiFunctions";
+import { getIndexes } from "#/functions/apiFunctions";
+import { useAtom } from "jotai";
+import { pingAtom } from "#/lib/atoms";
 export default function StatusLed() {
-  const { data, isSuccess } = useQuery({
-    queryKey: ["ping"],
-    queryFn: ping,
-    retry: true,
-    retryDelay: 2000,
-    refetchOnMount: true,
-    staleTime: 1000 * 60 * 2,
-  });
+  const [{ data, isSuccess }] = useAtom(pingAtom);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   useQuery({
     queryKey: ["getAllIndexes"],
