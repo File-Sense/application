@@ -11,7 +11,6 @@ use crate::python::*;
 use once_cell::sync::OnceCell;
 #[cfg(debug_assertions)]
 use std::path::PathBuf;
-use std::str::FromStr;
 use std::sync::Mutex;
 #[cfg(not(debug_assertions))]
 use std::{fs, os::windows::process::CommandExt, path::PathBuf};
