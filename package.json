@@ -11,7 +11,8 @@
     "dev": "yarn tauri dev",
     "dev:Web": "concurrently \"yarn:dev:PY:NOR\" \"yarn:dev:App\" \"start http://localhost:3000\"",
     "build:App": "yarn dev:CP && cd frontend && yarn build",
-    "build": "yarn tauri build"
+    "build": "yarn tauri build",
+    "build:MSI": "yarn tauri build --bundles msi"
   },
   "author": "Pasindu Akalpa <pasinduakalpa1998@gmail.com>",
   "devDependencies": {

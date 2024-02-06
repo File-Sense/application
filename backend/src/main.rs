@@ -87,6 +87,7 @@ fn main() {
             let home_dir = path::home_dir().unwrap();
             let mut store_file_path = PathBuf::new();
             store_file_path.push(home_dir);
+            store_file_path.push(".filesense");
             store_file_path.push("filesense.bin");
             let mut store = StoreBuilder::new(app.handle(), store_file_path).build();
 
