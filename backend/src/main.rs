@@ -11,6 +11,7 @@ use crate::python::*;
 use once_cell::sync::OnceCell;
 #[cfg(debug_assertions)]
 use std::path::PathBuf;
+use std::str::FromStr;
 use std::sync::Mutex;
 #[cfg(not(debug_assertions))]
 use std::{fs, os::windows::process::CommandExt, path::PathBuf};
@@ -87,6 +88,7 @@ fn main() {
             let home_dir = path::home_dir().unwrap();
             let mut store_file_path = PathBuf::new();
             store_file_path.push(home_dir);
+            store_file_path.push(".filesense");
             store_file_path.push("filesense.bin");
             let mut store = StoreBuilder::new(app.handle(), store_file_path).build();
 
