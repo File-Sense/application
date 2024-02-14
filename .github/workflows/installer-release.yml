@@ -1,0 +1,60 @@
+name: Release Installer
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Rust setup
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./backend -> target"
+
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+
+      - name: Download Models
+        shell: pwsh
+        run: |
+          .\download_models.ps1
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Activate Python venv
+        shell: pwsh
+        run: |
+          .\.venv\Scripts\Activate.ps1
+
+      - name: Build MSI
+        run: |
+          yarn build:MSI
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: filesense-installer
+          path: .\backend\target\release\bundle\msi\*.msi
