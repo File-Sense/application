@@ -1,0 +1,73 @@
+function Download-Files {
+    param (
+        [string]$BaseUrl,
+        [hashtable]$Files,
+        [string]$DestDir
+    )
+
+    # Ensure the destination directory exists
+    New-Item -ItemType Directory -Force -Path $DestDir | Out-Null
+
+    # Loop through the hashtable and download each file
+    foreach ($remote_file in $Files.GetEnumerator()) {
+        $local_file = $remote_file.Value
+        $download_url = "$BaseUrl/$($remote_file.Name)"
+        $destination_path = Join-Path -Path $DestDir -ChildPath $local_file
+        Write-Host "Downloading $($remote_file.Name) to $destination_path"
+        Invoke-WebRequest -Uri $download_url -OutFile $destination_path -UseBasicParsing
+    }
+}
+
+# Base URLs for the files
+$BASE_URL_CAPTION = "https://huggingface.co/Salesforce/blip-image-captioning-base/resolve/main"
+$BASE_URL_IMAGE = "https://huggingface.co/google/vit-base-patch16-224-in21k/resolve/main"
+$BASE_URL_TEXT = "https://huggingface.co/sentence-transformers/multi-qa-MiniLM-L6-cos-v1/resolve/main"
+
+# Destination directories
+$DEST_DIR_CAPTION = "./engine/AI/model-caption"
+$DEST_DIR_IMAGE = "./engine/AI/model-image"
+$DEST_DIR_TEXT = "./engine/AI/model-text"
+
+# Declare hashtables for files to download
+$files_caption = @{
+    "config.json?download=true" = "model-captionconfig.json"
+    "preprocessor_config.json?download=true" = "preprocessor_config.json"
+    "pytorch_model.bin?download=true" = "pytorch_model.bin"
+    "special_tokens_map.json?download=true" = "special_tokens_map.json"
+    "tokenizer.json?download=true" = "tokenizer.json"
+    "tokenizer_config.json?download=true" = "tokenizer_config.json"
+    "vocab.txt?download=true" = "vocab.txt"
+}
+
+$files_image = @{
+    "config.json?download=true" = "config.json"
+    "preprocessor_config.json?download=true" = "preprocessor_config.json"
+    "pytorch_model.bin?download=true" = "pytorch_model.bin"
+}
+
+$files_text = @{
+    "config_sentence_transformers.json?download=true" = "config_sentence_transformers.json"
+    "config.json?download=true" = "config.json"
+    "data_config.json?download=true" = "data_config.json"
+    "modules.json?download=true" = "modules.json"
+    "pytorch_model.bin?download=true" = "pytorch_model.bin"
+    "sentence_bert_config.json?download=true" = "sentence_bert_config.json"
+    "special_tokens_map.json?download=true" = "special_tokens_map.json"
+    "tokenizer_config.json?download=true" = "tokenizer_config.json"
+    "tokenizer.json?download=true" = "tokenizer.json"
+    "vocab.txt?download=true" = "vocab.txt"
+}
+
+# Download files for model-caption
+Write-Host "Downloading model-caption files..."
+Download-Files -BaseUrl $BASE_URL_CAPTION -Files $files_caption -DestDir $DEST_DIR_CAPTION
+
+# Download files for model-image
+Write-Host "Downloading model-image files..."
+Download-Files -BaseUrl $BASE_URL_IMAGE -Files $files_image -DestDir $DEST_DIR_IMAGE
+
+# Download files for model-text
+Write-Host "Downloading model-text files..."
+Download-Files -BaseUrl $BASE_URL_TEXT -Files $files_text -DestDir $DEST_DIR_TEXT
+
+Write-Host "Download completed."
