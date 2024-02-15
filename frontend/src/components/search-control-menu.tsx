@@ -83,7 +83,7 @@ export default function SearchControlMenu({
   });
   async function onSubmit(data: searchControlSchemas) {
     if ("searchPhrase" in data) {
-      const { data: fPaths } = await queryClient.fetchQuery({
+      const { data: resultData } = await queryClient.fetchQuery({
         queryKey: ["sbt"],
         queryFn: () =>
           searchByText({
@@ -92,7 +92,7 @@ export default function SearchControlMenu({
             limit: data.nor,
           }),
       });
-      setFetchedPaths(fPaths || []);
+      setFetchedPaths(resultData || null);
       form.reset({
         searchPhrase: "",
       });
@@ -105,7 +105,7 @@ export default function SearchControlMenu({
           "image." + imageObj.imageExtension
         );
       }
-      const { data: fPaths } = await queryClient.fetchQuery({
+      const { data: resultData } = await queryClient.fetchQuery({
         queryKey: ["sbi"],
         queryFn: () =>
           searchByImage({
@@ -114,7 +114,7 @@ export default function SearchControlMenu({
             limit: data.nor,
           }),
       });
-      setFetchedPaths(fPaths || []);
+      setFetchedPaths(resultData || null);
       setImageObj(undefined);
       form.reset({
         refImage: "",

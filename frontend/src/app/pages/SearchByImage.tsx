@@ -9,7 +9,7 @@ export default function SearchByImage() {
   const [refImage, setRefImage] = useAtom(refImageAtom);
   const [, setFetchedPaths] = useAtom(fetchedPathsAtom);
   useEffect(() => {
-    setFetchedPaths([]);
+    setFetchedPaths(null);
     return () => {
       setRefImage(null);
     };

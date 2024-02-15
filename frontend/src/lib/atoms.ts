@@ -1,6 +1,7 @@
 import { ping } from "#/functions/apiFunctions";
 import { atom } from "jotai";
 import { atomWithQuery } from "jotai-tanstack-query";
+import { Data } from "./types";
 
 export const pingAtom = atomWithQuery(() => ({
   queryKey: ["ping"],
@@ -14,6 +15,6 @@ export const globalIndexingStateAtom = atom(false);
 
 export const refImageAtom = atom<string | null>(null);
 
-export const fetchedPathsAtom = atom<string[]>([]);
+export const fetchedPathsAtom = atom<Data | null>(null);
 
 export const aboutFileSenseDialogStateAtom = atom(false);

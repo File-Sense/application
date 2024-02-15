@@ -41,8 +41,13 @@ export interface IndexDirectoryResponse extends GeneralApiResponse {
   index_id?: string;
 }
 
+export interface Data {
+  img_paths: string[];
+  img_distances: number[];
+}
+
 export interface SearchByTextAndImageResponse extends GeneralApiResponse {
-  data?: string[];
+  data?: Data;
 }
 
 export interface IHttpFunction {
