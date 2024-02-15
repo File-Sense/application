@@ -174,7 +174,9 @@ export default function SearchControlMenu({
                           {field.value
                             ? pathToDisplayPath(
                                 index_list?.data.find(
-                                  (index) => index.index_id === field.value
+                                  (index) =>
+                                    index.index_id === field.value &&
+                                    index.index_status === 0
                                 )?.index_path ?? ""
                               )
                             : "Select Index"}
@@ -190,25 +192,27 @@ export default function SearchControlMenu({
                         />
                         <CommandEmpty>No Index found.</CommandEmpty>
                         <CommandGroup>
-                          {index_list?.data.map((index) => (
-                            <CommandItem
-                              value={index.index_id}
-                              key={pathToDisplayPath(index.index_path)}
-                              onSelect={() => {
-                                form.setValue("index", index.index_id);
-                              }}
-                            >
-                              {pathToDisplayPath(index.index_path)}
-                              <CheckIcon
-                                className={cn(
-                                  "ml-auto h-4 w-4",
-                                  index.index_id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                            </CommandItem>
-                          ))}
+                          {index_list?.data
+                            .filter((index) => index.index_status === 0)
+                            .map((index) => (
+                              <CommandItem
+                                value={index.index_id}
+                                key={pathToDisplayPath(index.index_path)}
+                                onSelect={() => {
+                                  form.setValue("index", index.index_id);
+                                }}
+                              >
+                                {pathToDisplayPath(index.index_path)}
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    index.index_id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
