@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export default function SearchByText() {
   const [, setFetchedPaths] = useAtom(fetchedPathsAtom);
   useEffect(() => {
-    setFetchedPaths([]);
+    setFetchedPaths(null);
   }, [setFetchedPaths]);
 
   return (
