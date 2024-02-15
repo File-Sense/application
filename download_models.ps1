@@ -30,7 +30,7 @@ $DEST_DIR_TEXT = "./engine/AI/model-text"
 
 # Declare hashtables for files to download
 $files_caption = @{
-    "config.json?download=true" = "model-captionconfig.json"
+    "config.json?download=true" = "config.json"
     "preprocessor_config.json?download=true" = "preprocessor_config.json"
     "pytorch_model.bin?download=true" = "pytorch_model.bin"
     "special_tokens_map.json?download=true" = "special_tokens_map.json"
