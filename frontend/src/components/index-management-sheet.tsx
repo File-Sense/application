@@ -82,10 +82,11 @@ export default function IndexManagementSheet() {
         <SheetHeader>
           <SheetTitle>Indexing Management</SheetTitle>
           <SheetDescription>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque
-            accusantium minima voluptas consectetur unde reiciendis tempore
-            dolore reprehenderit, ipsum in praesentium quaerat quidem. Sint,
-            placeat ducimus recusandae rem impedit enim!
+            This feature simplifies the complex process of indexing, making it
+            accessible to users of all technical levels. Whether you're managing
+            large datasets or simply organizing personal files, the Indexing
+            Management tool provides a reliable and effective solution to
+            enhance your data management practices.
           </SheetDescription>
         </SheetHeader>
         <div className="flex flex-col w-[100%] my-4 justify-between">

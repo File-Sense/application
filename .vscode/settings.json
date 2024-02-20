@@ -1,7 +1,3 @@
 {
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "off",
-    "tailwindCSS.includeLanguages": {
-        "html": "html",
-    }
+  "rust-analyzer.linkedProjects": [".\\backend\\Cargo.toml"]
 }

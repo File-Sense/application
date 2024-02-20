@@ -77,6 +77,32 @@ export const imageSearchSchema = z.object({
   nor: z.number().min(1).max(25).default(3),
 });
 
+export const metadataSearchSchema = z
+  .object({
+    mount_point: z
+      .string({
+        required_error: "Please select a drive.",
+      })
+      .min(1),
+    keyword: z
+      .string({
+        required_error: "Please enter a keyword.",
+      })
+      .min(1),
+    extension: z.string().optional(),
+    accept_files: z.boolean().default(true),
+    accept_dirs: z.boolean().default(true),
+  })
+  .refine((data) => (data.accept_files ? data.extension : true), {
+    message: "Please select a file extension.",
+    path: ["extension"],
+  })
+  .refine((data) => data.accept_files || data.accept_dirs, {
+    message: "Either accept files or directories must be selected.",
+    path: ["acceptFiles", "acceptDirectories"],
+  });
+
+export type MetadataSearchSchema = z.infer<typeof metadataSearchSchema>;
 type TextSearchSchema = z.infer<typeof textSearchSchema>;
 type ImageSearchSchema = z.infer<typeof imageSearchSchema>;
 
@@ -95,4 +121,28 @@ export interface OpenDirectoryReturnObject {
   directoryPath: string;
   directoryDisplayString: string;
   escapedDirectoryPath: string;
+}
+
+export interface VolumeData {
+  name: string;
+  mount_point: string;
+}
+
+export interface FileEntry {
+  File: [string, string];
+}
+
+export interface DirectoryEntry {
+  Directory: [string, string];
+}
+
+export type SearchEntry = FileEntry | DirectoryEntry;
+
+export interface DirectoryContent {
+  files_directories: SearchEntry[];
+  search_time: string;
+}
+
+export interface ISearchByMetadata extends MetadataSearchSchema {
+  search_directory: string;
 }

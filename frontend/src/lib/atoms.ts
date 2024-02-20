@@ -1,4 +1,5 @@
 import { ping } from "#/functions/apiFunctions";
+import { getVolumeData } from "#/functions/tauriFunctions";
 import { atom } from "jotai";
 import { atomWithQuery } from "jotai-tanstack-query";
 
@@ -8,6 +9,12 @@ export const pingAtom = atomWithQuery(() => ({
   retry: true,
   retryDelay: 2000,
   refetchOnMount: true,
+}));
+
+export const volumeDataAtom = atomWithQuery(() => ({
+  queryKey: ["getVolumeData"],
+  queryFn: getVolumeData,
+  staleTime: Infinity,
 }));
 
 export const globalIndexingStateAtom = atom(false);

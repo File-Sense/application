@@ -6,8 +6,16 @@ import {
   pathToDisplayPath,
   uint8arrayToBlob,
 } from "./commonFunctions";
-import { OpenDirectoryReturnObject, OpenImageReturnObject } from "#/lib/types";
+import {
+  DirectoryContent,
+  ISearchByMetadata,
+  OpenDirectoryReturnObject,
+  OpenImageReturnObject,
+  SearchEntry,
+  VolumeData,
+} from "#/lib/types";
 import { homeDir } from "@tauri-apps/api/path";
+import { invoke } from "@tauri-apps/api/tauri";
 
 export const openImageFile = async (): Promise<
   OpenImageReturnObject | false
@@ -56,4 +64,27 @@ export const openDirectory = async (): Promise<
     escapedDirectoryPath: escapedPath,
     directoryDisplayString: displayPath,
   } as OpenDirectoryReturnObject;
+};
+
+export const getVolumeData = async (): Promise<VolumeData[]> => {
+  const volumes = await invoke<VolumeData[]>("get_volumes");
+  return volumes;
+};
+
+export const searchFilesAndDirectories = async (
+  data: ISearchByMetadata
+): Promise<DirectoryContent> => {
+  const directoryContent = await invoke<DirectoryContent>("search_dir", {
+    ...data,
+  });
+  return directoryContent;
+};
+
+export const openDirectoryContent = async (
+  path: string
+): Promise<SearchEntry[]> => {
+  const directoryContent = await invoke<SearchEntry[]>("open_directory", {
+    path,
+  });
+  return directoryContent;
 };
