@@ -83,8 +83,11 @@ export const searchFilesAndDirectories = async (
 export const openDirectoryContent = async (
   path: string
 ): Promise<SearchEntry[]> => {
-  const directoryContent = await invoke<SearchEntry[]>("open_directory", {
-    path,
-  });
+  let directoryContent = [] as SearchEntry[];
+  if (path !== "") {
+    directoryContent = await invoke<SearchEntry[]>("open_directory", {
+      path,
+    });
+  }
   return directoryContent;
 };

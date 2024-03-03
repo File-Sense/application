@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import {
   MetadataSearchSchema,
+  SearchEntry,
   VolumeData,
   metadataSearchSchema,
 } from "#/lib/types";
@@ -26,13 +27,17 @@ import {
 } from "./ui/command";
 import { cn } from "#/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Dispatch } from "react";
+import { openDirectoryContent } from "#/functions/tauriFunctions";
 
 export default function SearchControlMenuMetadataSearch({
   drives,
   onSubmit,
+  setDirectoryContent,
 }: {
   drives: VolumeData[];
   onSubmit: (data: MetadataSearchSchema) => void;
+  setDirectoryContent: Dispatch<SearchEntry[] | undefined>;
 }) {
   const form = useForm<MetadataSearchSchema>({
     mode: "all",
@@ -49,7 +54,7 @@ export default function SearchControlMenuMetadataSearch({
       <form onSubmit={form.handleSubmit(onSubmit)} className="">
         <FormField
           control={form.control}
-          name="mount_point"
+          name="mountPoint"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Select Drive to Search within</FormLabel>
@@ -76,8 +81,10 @@ export default function SearchControlMenuMetadataSearch({
                         <CommandItem
                           value={d.value}
                           key={d.value}
-                          onSelect={() => {
-                            form.setValue("mount_point", d.value);
+                          onSelect={async () => {
+                            form.setValue("mountPoint", d.value);
+                            const data = await openDirectoryContent(d.value);
+                            setDirectoryContent(data);
                           }}
                         >
                           {d.label}
@@ -127,7 +134,7 @@ export default function SearchControlMenuMetadataSearch({
         />
         <FormField
           control={form.control}
-          name="accept_files"
+          name="acceptFiles"
           render={({ field }) => (
             <FormItem>
               <FormControl>
@@ -136,14 +143,14 @@ export default function SearchControlMenuMetadataSearch({
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormMessage />
+              {/* <FormMessage /> */}
               <FormLabel>Search Files</FormLabel>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="accept_dirs"
+          name="acceptDirs"
           render={({ field }) => (
             <FormItem>
               <FormControl>
@@ -152,7 +159,7 @@ export default function SearchControlMenuMetadataSearch({
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormMessage />
+              {/* <FormMessage /> */}
               <FormLabel>Search Folders</FormLabel>
             </FormItem>
           )}

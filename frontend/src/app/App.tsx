@@ -1,6 +1,6 @@
 import NavBar from "#/components/navbar";
 import NotFound from "#/components/not-found";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import SearchByImage from "./pages/SearchByImage";
 import SearchByText from "./pages/SearchByText";
 import { Toaster } from "#/components/ui/sonner";
@@ -8,8 +8,9 @@ import Home from "./pages/Home";
 import SearchByMetadata from "./pages/SearchByMetadata";
 
 function App() {
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
   return (
-    <BrowserRouter>
+    <div className="select-none">
       <header>
         <NavBar />
       </header>
@@ -25,7 +26,7 @@ function App() {
         </main>
         <Toaster />
       </div>
-    </BrowserRouter>
+    </div>
   );
 }
 

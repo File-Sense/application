@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 import * as z from "zod";
 
 export interface PingResponse {
@@ -41,8 +42,13 @@ export interface IndexDirectoryResponse extends GeneralApiResponse {
   index_id?: string;
 }
 
+export interface Data {
+  img_paths: string[];
+  img_distances: number[];
+}
+
 export interface SearchByTextAndImageResponse extends GeneralApiResponse {
-  data?: string[];
+  data?: Data;
 }
 
 export interface IHttpFunction {
@@ -79,7 +85,7 @@ export const imageSearchSchema = z.object({
 
 export const metadataSearchSchema = z
   .object({
-    mount_point: z
+    mountPoint: z
       .string({
         required_error: "Please select a drive.",
       })
@@ -89,17 +95,21 @@ export const metadataSearchSchema = z
         required_error: "Please enter a keyword.",
       })
       .min(1),
-    extension: z.string().optional(),
-    accept_files: z.boolean().default(true),
-    accept_dirs: z.boolean().default(true),
+    extension: z.string().optional().default(""),
+    acceptFiles: z.boolean().default(false),
+    acceptDirs: z.boolean().default(false),
   })
-  .refine((data) => (data.accept_files ? data.extension : true), {
-    message: "Please select a file extension.",
-    path: ["extension"],
-  })
-  .refine((data) => data.accept_files || data.accept_dirs, {
+  .refine(
+    (data) =>
+      data.acceptFiles ? data.extension && data.extension.length > 0 : true,
+    {
+      message: "Please enter a file extension.",
+      path: ["extension"],
+    }
+  )
+  .refine((data) => data.acceptFiles || data.acceptDirs, {
     message: "Either accept files or directories must be selected.",
-    path: ["acceptFiles", "acceptDirectories"],
+    path: ["acceptFiles", "acceptDirs"],
   });
 
 export type MetadataSearchSchema = z.infer<typeof metadataSearchSchema>;
@@ -144,5 +154,12 @@ export interface DirectoryContent {
 }
 
 export interface ISearchByMetadata extends MetadataSearchSchema {
-  search_directory: string;
+  searchDirectory: string;
+}
+
+export interface TreeData {
+  id: string;
+  name: string;
+  icon?: LucideIcon;
+  children?: TreeData[];
 }
