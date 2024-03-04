@@ -83,34 +83,24 @@ export const imageSearchSchema = z.object({
   nor: z.number().min(1).max(25).default(3),
 });
 
-export const metadataSearchSchema = z
-  .object({
-    mountPoint: z
-      .string({
-        required_error: "Please select a drive.",
-      })
-      .min(1),
-    keyword: z
-      .string({
-        required_error: "Please enter a keyword.",
-      })
-      .min(1),
-    extension: z.string().optional().default(""),
-    acceptFiles: z.boolean().default(false),
-    acceptDirs: z.boolean().default(false),
-  })
-  .refine(
-    (data) =>
-      data.acceptFiles ? data.extension && data.extension.length > 0 : true,
-    {
-      message: "Please enter a file extension.",
-      path: ["extension"],
-    }
-  )
-  .refine((data) => data.acceptFiles || data.acceptDirs, {
-    message: "Either accept files or directories must be selected.",
-    path: ["acceptFiles", "acceptDirs"],
-  });
+export const metadataSearchSchema = z.object({
+  mountPoint: z
+    .string({
+      required_error: "Please select a drive.",
+    })
+    .min(1),
+  keyword: z
+    .string({
+      required_error: "Please enter a keyword.",
+    })
+    .min(1),
+  extension: z.string().optional().default(""),
+  searchType: z
+    .array(z.string())
+    .refine((value) => value.some((item) => item), {
+      message: "You have to select at least one Search Type.",
+    }),
+});
 
 export type MetadataSearchSchema = z.infer<typeof metadataSearchSchema>;
 type TextSearchSchema = z.infer<typeof textSearchSchema>;
@@ -153,7 +143,12 @@ export interface DirectoryContent {
   search_time: string;
 }
 
-export interface ISearchByMetadata extends MetadataSearchSchema {
+export interface ISearchContent {
+  mountPoint: string;
+  keyword: string;
+  extension: string;
+  acceptFiles: boolean;
+  acceptDirs: boolean;
   searchDirectory: string;
 }
 

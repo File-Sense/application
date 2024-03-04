@@ -157,7 +157,7 @@ pub fn run_cache_interval(state_mutex: &AppStateSafe) {
 
     tokio::spawn(async move {
         let mut interval = interval(Duration::from_secs(60));
-        interval.tick().await; // Wait 30 seconds before doing first re-cache
+        interval.tick().await; // Wait 1 minute before doing first re-cache
 
         loop {
             interval.tick().await;

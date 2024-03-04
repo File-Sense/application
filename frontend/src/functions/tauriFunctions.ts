@@ -8,7 +8,7 @@ import {
 } from "./commonFunctions";
 import {
   DirectoryContent,
-  ISearchByMetadata,
+  ISearchContent,
   OpenDirectoryReturnObject,
   OpenImageReturnObject,
   SearchEntry,
@@ -72,7 +72,7 @@ export const getVolumeData = async (): Promise<VolumeData[]> => {
 };
 
 export const searchFilesAndDirectories = async (
-  data: ISearchByMetadata
+  data: ISearchContent
 ): Promise<DirectoryContent> => {
   const directoryContent = await invoke<DirectoryContent>("search_dir", {
     ...data,

@@ -38,7 +38,6 @@ export default function TreeControl({
   ): TreeData[] {
     return nodes.map((node) => {
       if (node.id === selectedId) {
-        // Filter newData to exclude nodes that are already present
         const filteredNewData = newData.filter(
           (newNode) =>
             !(node.children || []).some(
@@ -60,22 +59,20 @@ export default function TreeControl({
   }
 
   return (
-    <div className="flex min-h-full space-x-2">
-      <Tree
-        className="flex-shrink-0 w-[250px] h-[460px] border-[1px]"
-        folderIcon={Folder}
-        itemIcon={Folder}
-        data={treeData}
-        onSelectChange={async (selectedItem) => {
-          if (selectedItem) {
-            setSelectedDirectory(selectedItem.id);
-            const data = await getPathDirectories(selectedItem.id);
-            const updatedData = updateTreeData(treeData, selectedItem.id, data);
-            setTreeData(updatedData);
-          }
-          return;
-        }}
-      />
-    </div>
+    <Tree
+      className="flex-shrink-0 h-[80vh] w-[40vh] border-[1px]"
+      folderIcon={Folder}
+      itemIcon={Folder}
+      data={treeData}
+      onSelectChange={async (selectedItem) => {
+        if (selectedItem) {
+          setSelectedDirectory(selectedItem.id);
+          const data = await getPathDirectories(selectedItem.id);
+          const updatedData = updateTreeData(treeData, selectedItem.id, data);
+          setTreeData(updatedData);
+        }
+        return;
+      }}
+    />
   );
 }

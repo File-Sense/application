@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   MetadataSearchSchema,
   SearchEntry,
@@ -42,6 +42,14 @@ export default function SearchControlMenuMetadataSearch({
   const form = useForm<MetadataSearchSchema>({
     mode: "all",
     resolver: zodResolver(metadataSearchSchema),
+    defaultValues: {
+      searchType: ["SearchFolders"],
+    },
+  });
+
+  const searchType = useWatch({
+    control: form.control,
+    name: "searchType",
   });
 
   const driveList = drives.map((d) => ({
@@ -49,15 +57,28 @@ export default function SearchControlMenuMetadataSearch({
     label: `${d.name}: ${d.mount_point}`,
   }));
 
+  const searchTypes = [
+    {
+      id: "SearchFiles",
+      label: "Search Files",
+    },
+    {
+      id: "SearchFolders",
+      label: "Search Folders",
+    },
+  ] as const;
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
         <FormField
           control={form.control}
           name="mountPoint"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Select Drive to Search within</FormLabel>
+            <FormItem className="flex items-center gap-2">
+              <FormLabel className="text-base">
+                Select Drive to Search within
+              </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -111,7 +132,7 @@ export default function SearchControlMenuMetadataSearch({
           name="keyword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Search Keyword</FormLabel>
+              <FormLabel className="text-base">Search Keyword</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -120,47 +141,61 @@ export default function SearchControlMenuMetadataSearch({
           )}
         />
         <FormField
+          control={form.control}
+          name="searchType"
+          render={() => (
+            <FormItem>
+              <div className="mb-4 mt-2">
+                <FormLabel className="text-base">Search Type</FormLabel>
+              </div>
+              {searchTypes.map((type) => (
+                <FormField
+                  key={type.id}
+                  control={form.control}
+                  name="searchType"
+                  render={({ field }) => {
+                    return (
+                      <FormItem
+                        key={type.id}
+                        className="flex flex-row items-start space-x-3 space-y-0"
+                      >
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value?.includes(type.id)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...field.value, type.id])
+                                : field.onChange(
+                                    field.value?.filter(
+                                      (value) => value !== type.id
+                                    )
+                                  );
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel className="text-sm font-normal">
+                          {type.label}
+                        </FormLabel>
+                      </FormItem>
+                    );
+                  }}
+                />
+              ))}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          disabled={!searchType?.includes("SearchFiles")}
           control={form.control}
           name="extension"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>extension</FormLabel>
+            <FormItem className="mb-3 mt-2">
+              <FormLabel className="text-base">File extension</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input placeholder="pdf" {...field} />
               </FormControl>
               <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="acceptFiles"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              {/* <FormMessage /> */}
-              <FormLabel>Search Files</FormLabel>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="acceptDirs"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              {/* <FormMessage /> */}
-              <FormLabel>Search Folders</FormLabel>
             </FormItem>
           )}
         />

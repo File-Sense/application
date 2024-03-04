@@ -14,7 +14,10 @@ use tauri::State;
 use crate::{
     error::Error,
     utils::{
-        cacheutils::{load_sys_cache, FileSystemEventHandler, CACHE_F_PATH},
+        cacheutils::{
+            load_sys_cache, run_cache_interval, save_system_cache, FileSystemEventHandler,
+            CACHE_F_PATH,
+        },
         searchutils::{check_file, score_f_name},
         volumeutils::Volume,
     },
@@ -75,6 +78,9 @@ pub async fn get_volumes(state_mutex: State<'_, AppStateSafe>) -> Result<Vec<Vol
             volume
         })
         .collect();
+
+    save_system_cache(&state_mutex);
+    run_cache_interval(&state_mutex);
 
     Ok(volumes)
 }
