@@ -47,23 +47,13 @@ jobs:
         shell: pwsh
         run: .\venv\Scripts\Activate.ps1
 
-      - name: Build MSI
-        run: yarn build:MSI
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          draft: false
+          tagName: ${{ github.ref_name }} # This only works if your workflow triggers on new tags.
+          releaseName: "App Name v__VERSION__" # tauri-action replaces \_\_VERSION\_\_ with the app version.
+          releaseBody: "See the assets to download and install this version."
+          releaseDraft: true
           prerelease: false
-
-      - name: Release Installer
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          files: ./backend/target/release/bundle/msi/*.msi
