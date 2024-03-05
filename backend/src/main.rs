@@ -3,29 +3,52 @@
 
 mod commands;
 mod common;
+mod error;
 mod python;
+mod utils;
 
 use crate::commands::*;
 use crate::common::*;
 use crate::python::*;
 use once_cell::sync::OnceCell;
+use serde::{Deserialize, Serialize};
 #[cfg(debug_assertions)]
 use std::path::PathBuf;
-use std::sync::Mutex;
+use std::{
+    collections::HashMap,
+    sync::{Arc, Mutex},
+};
 #[cfg(not(debug_assertions))]
 use std::{fs, os::windows::process::CommandExt, path::PathBuf};
-use tauri::api::dialog;
-use tauri::SystemTray;
-use tauri::SystemTrayEvent;
-use tauri::{api::path, async_runtime, Manager};
-use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::{
+    api::{dialog, path},
+    async_runtime, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
+    SystemTrayMenuItem,
+};
 use tauri_plugin_store::StoreBuilder;
 use which::which;
 
 // Global AppHandle
 pub static APP: OnceCell<tauri::AppHandle> = OnceCell::new();
 
+#[derive(Serialize, Deserialize)]
+pub struct CachePath {
+    #[serde(rename = "path")]
+    f_path: String,
+    #[serde(rename = "type")]
+    f_type: String,
+}
+
 struct Indexing(pub Mutex<bool>);
+
+pub type VCache = HashMap<String, Vec<CachePath>>;
+
+#[derive(Default)]
+pub struct AppState {
+    sys_cache: HashMap<String, VCache>,
+}
+
+pub type AppStateSafe = Arc<Mutex<AppState>>;
 
 fn main() {
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
@@ -71,6 +94,7 @@ fn main() {
             _ => {}
         })
         .manage(Indexing(Mutex::new(false)))
+        .manage(Arc::new(Mutex::new(AppState::default())))
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             APP.get_or_init(|| app.handle());
@@ -88,7 +112,7 @@ fn main() {
             let mut store_file_path = PathBuf::new();
             store_file_path.push(home_dir);
             store_file_path.push(".filesense");
-            store_file_path.push("filesense.bin");
+            store_file_path.push(format!("{}.bin", env!("CARGO_PKG_NAME")));
             let mut store = StoreBuilder::new(app.handle(), store_file_path).build();
 
             match store.load() {
@@ -139,9 +163,11 @@ fn main() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            greet,
             show_in_folder,
-            set_index_state
+            set_index_state,
+            get_volumes,
+            search_dir,
+            open_directory
         ])
         .on_window_event(|event| match event.event() {
             tauri::WindowEvent::CloseRequested { api, .. } => {

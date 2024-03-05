@@ -1,3 +1,4 @@
+import { DirectoryEntry, SearchEntry } from "#/lib/types";
 import { readBinaryFile } from "@tauri-apps/api/fs";
 
 export const uint8arrayToBlob = (
@@ -53,4 +54,10 @@ export const getImageObjectUrl = async (
   const binaryContent = await readBinaryFile(path);
   const imageBlob = uint8arrayToBlob(binaryContent, extension);
   return URL.createObjectURL(imageBlob);
+};
+
+export const isDirectoryEntry = (
+  entry: SearchEntry
+): entry is DirectoryEntry => {
+  return (entry as DirectoryEntry).Directory !== undefined;
 };
