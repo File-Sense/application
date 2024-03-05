@@ -3,6 +3,7 @@ import { getVolumeData } from "#/functions/tauriFunctions";
 import { atom } from "jotai";
 import { atomWithQuery } from "jotai-tanstack-query";
 import { Data } from "./types";
+import { getVersion } from "@tauri-apps/api/app";
 
 export const pingAtom = atomWithQuery(() => ({
   queryKey: ["ping"],
@@ -15,6 +16,12 @@ export const pingAtom = atomWithQuery(() => ({
 export const volumeDataAtom = atomWithQuery(() => ({
   queryKey: ["getVolumeData"],
   queryFn: getVolumeData,
+  staleTime: Infinity,
+}));
+
+export const versionAtom = atomWithQuery(() => ({
+  queryKey: ["version"],
+  queryFn: getVersion,
   staleTime: Infinity,
 }));
 

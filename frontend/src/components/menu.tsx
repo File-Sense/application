@@ -12,10 +12,11 @@ import {
 } from "#/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
 import { useAtom } from "jotai";
-import { pingAtom, volumeDataAtom } from "#/lib/atoms";
+import { pingAtom, versionAtom, volumeDataAtom } from "#/lib/atoms";
 
 export function NavigationMenuBar() {
   const [{ data }] = useAtom(pingAtom);
+  useAtom(versionAtom);
   useAtom(volumeDataAtom);
 
   return (
