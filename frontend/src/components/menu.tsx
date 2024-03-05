@@ -12,10 +12,12 @@ import {
 } from "#/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
 import { useAtom } from "jotai";
-import { pingAtom } from "#/lib/atoms";
+import { pingAtom, versionAtom, volumeDataAtom } from "#/lib/atoms";
 
-export function NavigationMenuDemo() {
+export function NavigationMenuBar() {
   const [{ data }] = useAtom(pingAtom);
+  useAtom(versionAtom);
+  useAtom(volumeDataAtom);
 
   return (
     <NavigationMenu className="justify-self-center">

@@ -7,7 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import { FolderTreeIcon, Loader2 } from "lucide-react";
 import CopyAction from "./copy-action";
 import { invoke } from "@tauri-apps/api/tauri";
-export default function ImageComponent({ imagePath }: { imagePath: string }) {
+export default function ImageComponent({
+  imagePath,
+  imageDistance,
+}: {
+  imagePath: string;
+  imageDistance: number;
+}) {
   const { isLoading, data: imageURL } = useQuery({
     queryKey: ["read_image", { imagePath }],
     queryFn: () => getImageObjectUrl(imagePath),
@@ -44,6 +50,11 @@ export default function ImageComponent({ imagePath }: { imagePath: string }) {
       </div>
       <div className="absolute inset-0 flex translate-y-[100%] flex-col items-center justify-end text-center transition-all duration-500 group-hover:translate-y-0">
         <div className="flex flex-col bg-black p-3 items-center">
+          <div className="flex items-center justify-start group w-full">
+            <p className="w-56 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 truncate">
+              {imageDistance.toFixed(5)}
+            </p>
+          </div>
           <div className="flex items-center justify-start group w-full">
             <p className="w-56 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100 truncate">
               {fileName}

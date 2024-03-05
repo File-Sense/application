@@ -5,8 +5,8 @@ import { fetchedPathsAtom } from "#/lib/atoms";
 
 export default function ImagesPanel() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [fetchedPaths, _] = useAtom(fetchedPathsAtom);
-  if (fetchedPaths.length === 0) {
+  const [fetchedData, _] = useAtom(fetchedPathsAtom);
+  if (fetchedData === null) {
     return <></>;
   }
   return (
@@ -16,8 +16,12 @@ export default function ImagesPanel() {
           Search Results
         </h4>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 items-center">
-          {fetchedPaths.map((path, idx) => (
-            <ImageComponent key={idx} imagePath={path} />
+          {fetchedData.img_paths.map((path, idx) => (
+            <ImageComponent
+              key={idx}
+              imagePath={path}
+              imageDistance={fetchedData.img_distances[idx]}
+            />
           ))}
         </div>
       </div>

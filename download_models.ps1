@@ -1,4 +1,4 @@
-function Download-Files {
+function Get-Files {
     param (
         [string]$BaseUrl,
         [hashtable]$Files,
@@ -30,44 +30,44 @@ $DEST_DIR_TEXT = "./engine/AI/model-text"
 
 # Declare hashtables for files to download
 $files_caption = @{
-    "config.json?download=true" = "model-captionconfig.json"
+    "config.json?download=true"              = "config.json"
     "preprocessor_config.json?download=true" = "preprocessor_config.json"
-    "pytorch_model.bin?download=true" = "pytorch_model.bin"
-    "special_tokens_map.json?download=true" = "special_tokens_map.json"
-    "tokenizer.json?download=true" = "tokenizer.json"
-    "tokenizer_config.json?download=true" = "tokenizer_config.json"
-    "vocab.txt?download=true" = "vocab.txt"
+    "pytorch_model.bin?download=true"        = "pytorch_model.bin"
+    "special_tokens_map.json?download=true"  = "special_tokens_map.json"
+    "tokenizer.json?download=true"           = "tokenizer.json"
+    "tokenizer_config.json?download=true"    = "tokenizer_config.json"
+    "vocab.txt?download=true"                = "vocab.txt"
 }
 
 $files_image = @{
-    "config.json?download=true" = "config.json"
+    "config.json?download=true"              = "config.json"
     "preprocessor_config.json?download=true" = "preprocessor_config.json"
-    "pytorch_model.bin?download=true" = "pytorch_model.bin"
+    "pytorch_model.bin?download=true"        = "pytorch_model.bin"
 }
 
 $files_text = @{
     "config_sentence_transformers.json?download=true" = "config_sentence_transformers.json"
-    "config.json?download=true" = "config.json"
-    "data_config.json?download=true" = "data_config.json"
-    "modules.json?download=true" = "modules.json"
-    "pytorch_model.bin?download=true" = "pytorch_model.bin"
-    "sentence_bert_config.json?download=true" = "sentence_bert_config.json"
-    "special_tokens_map.json?download=true" = "special_tokens_map.json"
-    "tokenizer_config.json?download=true" = "tokenizer_config.json"
-    "tokenizer.json?download=true" = "tokenizer.json"
-    "vocab.txt?download=true" = "vocab.txt"
+    "config.json?download=true"                       = "config.json"
+    "data_config.json?download=true"                  = "data_config.json"
+    "modules.json?download=true"                      = "modules.json"
+    "pytorch_model.bin?download=true"                 = "pytorch_model.bin"
+    "sentence_bert_config.json?download=true"         = "sentence_bert_config.json"
+    "special_tokens_map.json?download=true"           = "special_tokens_map.json"
+    "tokenizer_config.json?download=true"             = "tokenizer_config.json"
+    "tokenizer.json?download=true"                    = "tokenizer.json"
+    "vocab.txt?download=true"                         = "vocab.txt"
 }
 
 # Download files for model-caption
 Write-Host "Downloading model-caption files..."
-Download-Files -BaseUrl $BASE_URL_CAPTION -Files $files_caption -DestDir $DEST_DIR_CAPTION
+Get-Files -BaseUrl $BASE_URL_CAPTION -Files $files_caption -DestDir $DEST_DIR_CAPTION
 
 # Download files for model-image
 Write-Host "Downloading model-image files..."
-Download-Files -BaseUrl $BASE_URL_IMAGE -Files $files_image -DestDir $DEST_DIR_IMAGE
+Get-Files -BaseUrl $BASE_URL_IMAGE -Files $files_image -DestDir $DEST_DIR_IMAGE
 
 # Download files for model-text
 Write-Host "Downloading model-text files..."
-Download-Files -BaseUrl $BASE_URL_TEXT -Files $files_text -DestDir $DEST_DIR_TEXT
+Get-Files -BaseUrl $BASE_URL_TEXT -Files $files_text -DestDir $DEST_DIR_TEXT
 
 Write-Host "Download completed."

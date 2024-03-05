@@ -9,12 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { aboutFileSenseDialogStateAtom } from "#/lib/atoms";
+import { aboutFileSenseDialogStateAtom, versionAtom } from "#/lib/atoms";
 import { open as tauriOpen } from "@tauri-apps/api/shell";
 import { toast } from "sonner";
 
 export default function AboutFileSense() {
   const [open, setOpen] = useAtom(aboutFileSenseDialogStateAtom);
+  const [{ data }] = useAtom(versionAtom);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -39,7 +40,7 @@ export default function AboutFileSense() {
               Just kidding, it won't do that. Probably 🤞.
             </div>
             <div className="text-lg font-medium mt-2">
-              Version: 0.0.1 (pre-alpha)
+              Version: {data || "Loading..."}
             </div>
           </DialogDescription>
         </DialogHeader>

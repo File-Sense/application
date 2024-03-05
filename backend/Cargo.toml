@@ -12,15 +12,28 @@ rust-version = "1.60"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.5.0", features = [] }
+tauri-build = { version = "1.5.1", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.5.2", features = [ "system-tray", "fs-read-file", "path-all", "dialog-open", "shell-open"] }
+tauri = { version = "1.6.1", features = [ "updater", "system-tray", "fs-read-file", "path-all", "dialog-open", "shell-open"] }
 which = "6.0.0"
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 once_cell = "1.19.0"
+sysinfo = "0.30.6"
+walkdir = "2.5.0"
+fuzzy-matcher = "0.3.7"
+rayon = "1.9.0"
+dirs = "5.0.1"
+notify = "6.1.1"
+tokio = { version = "1.36.0", features = ["full"] }
+tokio-macros = "2.2.0"
+serde_bencode = "0.2.4"
+zstd = "0.13.0"
+lazy_static = "1.4.0"
+open = "5.1.1"
+thiserror = "1.0.57"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
