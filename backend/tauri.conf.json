@@ -61,7 +61,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "me.pasindu.filesense",
+      "identifier": "dev.akalpa.filesense",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -72,7 +72,7 @@
       },
       "resources": ["engine/*"],
       "shortDescription": "",
-      "targets": "all",
+      "targets": ["msi", "updater"],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
@@ -83,7 +83,16 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc3QjdBMjU4NDM5RDVDNjkKUldScFhKMURXS0szZDhEeFl2SVFuZGNlaG5TUlBVQXFGc3l5QUJFdGhtUm1UQ0loMTNwbUNJUnoK",
+      "endpoints": [
+        "https://filesenseupdateserver.akalpa.dev/{{target}}?version={{current_version}}&arch={{arch}}"
+      ],
+      "windows": {
+        "installMode": "passive",
+        "installerArgs": []
+      }
     },
     "windows": [
       {
