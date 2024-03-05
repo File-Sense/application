@@ -51,9 +51,31 @@ export default function FileFolderComponent({ data }: { data: SearchEntry }) {
     );
   } else {
     return (
-      <div className="flex flex-col w-5 h-5">
-        <File />
-        {data.File[0]}
+      <div className="flex flex-col w-30 h-30 items-center justify-center border rounded-md p-2">
+        <File size={40} />
+        <HoverCard>
+          <HoverCardTrigger>
+            <div className="flex items-center justify-center w-20">
+              <p className="text-sm italic truncate">{data.File[0]}</p>
+            </div>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            <div className="flex w-full items-center justify-center p-1">
+              <p className="text-sm italic truncate">
+                {pathToDisplayPath(data.File[1])}
+              </p>
+              <CopyAction text={data.File[1]} />
+            </div>
+            <div className="flex justify-center">
+              <Button
+                variant={"ghost"}
+                onClick={async () => openFileInFilemanager(data.File[1])}
+              >
+                OPEN
+              </Button>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
       </div>
     );
   }

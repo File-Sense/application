@@ -36,7 +36,10 @@ export default function ResultsPanel({
         Search Results
       </h3>
       <div className="flex w-full justify-end">
-        <p className="leading-7 [&:not(:first-child)]:mt-6 mr-4 mb-2">
+        <p className="leading-7 mr-4 mb-2">
+          No of Results: <b>{results.files_directories.length}</b>
+        </p>
+        <p className="leading-7 r-4 mb-2">
           Search Time: <b>{results.search_time}</b>ms
         </p>
       </div>
