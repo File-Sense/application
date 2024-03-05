@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 import * as z from "zod";
 
 export interface PingResponse {
@@ -82,6 +83,26 @@ export const imageSearchSchema = z.object({
   nor: z.number().min(1).max(25).default(3),
 });
 
+export const metadataSearchSchema = z.object({
+  mountPoint: z
+    .string({
+      required_error: "Please select a drive.",
+    })
+    .min(1),
+  keyword: z
+    .string({
+      required_error: "Please enter a keyword.",
+    })
+    .min(1),
+  extension: z.string().optional().default(""),
+  searchType: z
+    .array(z.string())
+    .refine((value) => value.some((item) => item), {
+      message: "You have to select at least one Search Type.",
+    }),
+});
+
+export type MetadataSearchSchema = z.infer<typeof metadataSearchSchema>;
 type TextSearchSchema = z.infer<typeof textSearchSchema>;
 type ImageSearchSchema = z.infer<typeof imageSearchSchema>;
 
@@ -100,4 +121,40 @@ export interface OpenDirectoryReturnObject {
   directoryPath: string;
   directoryDisplayString: string;
   escapedDirectoryPath: string;
+}
+
+export interface VolumeData {
+  name: string;
+  mount_point: string;
+}
+
+export interface FileEntry {
+  File: [string, string];
+}
+
+export interface DirectoryEntry {
+  Directory: [string, string];
+}
+
+export type SearchEntry = FileEntry | DirectoryEntry;
+
+export interface DirectoryContent {
+  files_directories: SearchEntry[];
+  search_time: string;
+}
+
+export interface ISearchContent {
+  mountPoint: string;
+  keyword: string;
+  extension: string;
+  acceptFiles: boolean;
+  acceptDirs: boolean;
+  searchDirectory: string;
+}
+
+export interface TreeData {
+  id: string;
+  name: string;
+  icon?: LucideIcon;
+  children?: TreeData[];
 }
