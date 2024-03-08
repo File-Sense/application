@@ -64,14 +64,14 @@ checksum = "5ad32ce52e4161730f7098c077cd2ed6229b5804ccf99e5366be1ab72a98b4e1"
 
 [[package]]
 name = "app"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "dirs",
  "fuzzy-matcher",
  "lazy_static",
  "notify",
  "once_cell",
- "open 5.1.1",
+ "open 5.1.2",
  "rayon",
  "serde",
  "serde_bencode",
@@ -2033,9 +2033,9 @@ dependencies = [
 
 [[package]]
 name = "open"
-version = "5.1.1"
+version = "5.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "68b3fbb0d52bf0cbb5225ba3d2c303aa136031d43abff98284332a9981ecddec"
+checksum = "449f0ff855d85ddbf1edd5b646d65249ead3f5e422aaa86b7d2d0b049b103e32"
 dependencies = [
  "is-wsl",
  "libc",
@@ -3095,9 +3095,9 @@ dependencies = [
 
 [[package]]
 name = "sysinfo"
-version = "0.30.6"
+version = "0.30.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6746919caf9f2a85bff759535664c060109f21975c5ac2e8652e60102bd4d196"
+checksum = "0c385888ef380a852a16209afc8cfad22795dd8873d69c9a14d2e2088f118d18"
 dependencies = [
  "cfg-if",
  "core-foundation-sys",
