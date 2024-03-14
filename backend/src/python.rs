@@ -33,7 +33,7 @@ fn install_python_dependencies(
         .arg("install")
         .arg("-r")
         .arg(requirements_txt.as_path())
-        .creation_flags(CREATE_NO_WINDOW)
+        // .creation_flags(CREATE_NO_WINDOW)
         .status()
         .expect("failed to install python deps");
 
