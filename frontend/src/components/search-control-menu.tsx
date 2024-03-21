@@ -48,7 +48,7 @@ import {
 } from "#/functions/apiFunctions";
 import { pathToDisplayPath } from "#/functions/commonFunctions";
 import { useAtom } from "jotai";
-import { fetchedPathsAtom, refImageAtom } from "#/lib/atoms";
+import { fetchedPathsAtom, refImageAtom, searchTimeAtom } from "#/lib/atoms";
 
 export default function SearchControlMenu({
   mode,
@@ -57,6 +57,7 @@ export default function SearchControlMenu({
 }) {
   const [, setFetchedPaths] = useAtom(fetchedPathsAtom);
   const [, setRefImage] = useAtom(refImageAtom);
+  const [, setSearchTime] = useAtom(searchTimeAtom);
   const queryClient = useQueryClient();
   const { isFetching } = useQuery({
     queryKey: ["openImageFile"],
@@ -83,6 +84,7 @@ export default function SearchControlMenu({
   });
   async function onSubmit(data: searchControlSchemas) {
     if ("searchPhrase" in data) {
+      const start = new Date().getTime();
       const { data: resultData } = await queryClient.fetchQuery({
         queryKey: ["sbt"],
         queryFn: () =>
@@ -93,6 +95,9 @@ export default function SearchControlMenu({
           }),
       });
       setFetchedPaths(resultData || null);
+      const end = new Date().getTime();
+      const searchByTextTime = end - start;
+      setSearchTime(searchByTextTime);
       form.reset({
         searchPhrase: "",
       });
@@ -105,6 +110,7 @@ export default function SearchControlMenu({
           "image." + imageObj.imageExtension
         );
       }
+      const start = new Date().getTime();
       const { data: resultData } = await queryClient.fetchQuery({
         queryKey: ["sbi"],
         queryFn: () =>
@@ -116,6 +122,9 @@ export default function SearchControlMenu({
       });
       setFetchedPaths(resultData || null);
       setImageObj(undefined);
+      const end = new Date().getTime();
+      const searchByImageTime = end - start;
+      setSearchTime(searchByImageTime);
       form.reset({
         refImage: "",
       });

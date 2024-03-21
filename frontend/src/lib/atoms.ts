@@ -31,4 +31,6 @@ export const refImageAtom = atom<string | null>(null);
 
 export const fetchedPathsAtom = atom<Data | null>(null);
 
+export const searchTimeAtom = atom<number | null>(null);
+
 export const aboutFileSenseDialogStateAtom = atom(false);

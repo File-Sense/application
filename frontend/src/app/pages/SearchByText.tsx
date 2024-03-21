@@ -2,14 +2,16 @@ import SearchControlMenu from "#/components/search-control-menu";
 import { Separator } from "#/components/ui/separator";
 import ImagesPanel from "#/components/images-panel";
 import { useAtom } from "jotai";
-import { fetchedPathsAtom } from "#/lib/atoms";
+import { fetchedPathsAtom, searchTimeAtom } from "#/lib/atoms";
 import { useEffect } from "react";
 
 export default function SearchByText() {
   const [, setFetchedPaths] = useAtom(fetchedPathsAtom);
+  const [, setSearchTime] = useAtom(searchTimeAtom);
   useEffect(() => {
     setFetchedPaths(null);
-  }, [setFetchedPaths]);
+    setSearchTime(null);
+  }, [setFetchedPaths, setSearchTime]);
 
   return (
     <div className="flex flex-col items-center w-full">
